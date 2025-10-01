@@ -6,14 +6,14 @@ function suma_concatena($dato1,$dato2,$tipo){
     if($tipo=='suma'){
         //Comproar que los datos son números
         if(is_numeric($dato1) and is_numeric($dato2)){
-            return $dato1+$dato2;
+            return $dato1+$dato2; //DEvuelve un número
         }            
         else {
-            return false;
+            return false; // Devuelve un boolean
         }
     }
     elseif($tipo=='conc'){
-        return $dato1.$dato2;
+        return $dato1.$dato2; //Devuelve un texto
     }
     else{
         return false;
@@ -43,6 +43,16 @@ function suma_concatena($dato1,$dato2,$tipo){
     <h2>Resultado</h2>
     <?php
         //Comprobar si hemos dado a enviar
+        if(isset($_GET['enviar'])){
+            $resultado = suma_concatena($_GET['d1'],$_GET['d2'],$_GET['tipo']);
+            //Si resultado es falso, hay error
+            if($resultado==false){
+                echo 'Error en los datos o en el tipo de operación';
+            }
+            else{
+                echo $resultado;
+            }
+        }
     ?>
 </body>
 </html>
