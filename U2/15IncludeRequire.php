@@ -7,11 +7,11 @@
 </head>
 <body>
     <?php
-    include_once '15Menua.php';
+    include_once '15Menua.php'; //Genera Warning
     ?>
     <h1>Mi página web</h1>
      <?php
-    require_once '15Menua.php';
+    require_once '15Menua.php';//Genera Error
     ?>
    <h1>Texto 1</h1>
    <?php
