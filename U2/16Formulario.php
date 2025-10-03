@@ -1,3 +1,19 @@
+<?php
+function recordarInput($campo){
+    return (!empty($_POST[$campo])?$_POST[$campo]:'');
+}
+function recordarRadioSelect($campo,$valor,$opocionPorDefecto,$atributo){
+    if($opocionPorDefecto){
+        return (!isset($_POST[$campo])||$_POST[$campo]==$valor?$atributo:'');
+    }
+    else{
+        return (isset($_POST[$campo])&&$_POST[$campo]==$valor?$atributo:'');
+    }
+}
+function rellenarMultiple($campo,$valor){
+    return (isset($_POST[$campo]) && in_array($valor,$_POST[$campo])?'selected':'');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,35 +27,45 @@
         <fieldset>
             <legend>Datos del Alumno</legend>
             <label for="nombre">Nombre</label><br>
-            <input type="text" name="nombre" id="nombre"><br>
+            <input type="text" name="nombre" id="nombre" value="<?php echo recordarInput('nombre')?>"><br>
             <label>Sexo</label><br>
             <label for="Hombre">Hombre</label>
-            <input type="radio" name="sexo" id="Hombre" value="H">
+            <input type="radio" name="sexo" id="Hombre" value="H" <?php 
+            echo recordarRadioSelect('sexo','H',false,'checked')?>>
             <label for="Mujer">Mujer</label>
-            <input type="radio" name="sexo" id="Mujer" value="M" checked="checked"><br>
+            <input type="radio" name="sexo" id="Mujer" value="M" <?php 
+            echo recordarRadioSelect('sexo','M',true,'checked')?>><br>
             <label for="foto">Foto</label><br>
             <input type="file" name="foto" id="foto"><br>
         </fieldset>
         <fieldset>
             <legend>Datos Matrícula</legend>
             <label for="fecha">Fecha Incorporación</label><br>
-            <input type="date" name="fecha" id="fecha">
-            <input type="time" name="hora" id="hora"><br>
+            <input type="date" name="fecha" id="fecha" value="<?php 
+            echo (isset($_POST['fecha'])?$_POST['fecha']:date('Y-m-d'));
+            ?>">
+            <input type="time" name="hora" id="hora" value="<?php 
+            echo (isset($_POST['hora'])?$_POST['hora']:date('H:i'));
+            ?>"><br>
             <label for="ciclo">Ciclo</label><br>
             <select name="ciclo" id="ciclo">
-                <option value="Sistemas Microinformáticos y Redes">SMR</option>
-                <option value="Desarrollo de Aplicaciones Web" selected="selected">DAW</option>
-                <option value="Desarrollo de Aplicaciones Multiplataforma">DAM</option>
-                <option value="Administración de Sistemas Informáticos en Red">ASIR</option>
+                <option value="Sistemas Microinformáticos y Redes" <?php 
+                    echo recordarRadioSelect('ciclo','Sistemas Microinformáticos y Redes',false,'selected')?>>SMR</option>
+                <option value="Desarrollo de Aplicaciones Web"  <?php 
+                    echo recordarRadioSelect('ciclo','Desarrollo de Aplicaciones Web',true,'selected')?>>DAW</option>
+                <option value="Desarrollo de Aplicaciones Multiplataforma" <?php 
+                    echo recordarRadioSelect('ciclo','Desarrollo de Aplicaciones Multiplataforma',false,'selected')?>>DAM</option>
+                <option value="Administración de Sistemas Informáticos en Red" <?php 
+                    echo recordarRadioSelect('ciclo','Administración de Sistemas Informáticos en Red',false,'selected')?>>ASIR</option>
             </select><br>
             <label for="asig">Asignaturas</label>
             <select name="asig[]" id="asig" multiple="multiple">
-                <option>PRO</option>
-                <option>LM</option>
-                <option>BD</option>
-                <option>DWES</option>
-                <option>DWEC</option>
-                <option>DAW</option>
+                <option <?php echo rellenarMultiple('asig','PRO')?>>PRO</option>
+                <option <?php echo rellenarMultiple('asig','LM')?>>LM</option>
+                <option <?php echo rellenarMultiple('asig','BD')?>>BD</option>
+                <option <?php echo rellenarMultiple('asig','DWES')?>>DWES</option>
+                <option <?php echo rellenarMultiple('asig','DWEC')?>>DWEC</option>
+                <option <?php echo rellenarMultiple('asig','DAW')?>>DAW</option>
             </select><br>
             <label for="beca">Becas</label><br>
             <label for="libros">Libros</label>
@@ -82,7 +108,7 @@
             if(move_uploaded_file($_FILES['foto']['tmp_name'],'img/'.$_FILES['foto']['name'])){
                 //Mostrar en la tabla
                echo '<tr><td>Foto</td>';
-               echo '<td><img src="img/'.$_FILES['foto']['name'].'" height="30px"></td></tr>'; 
+               echo '<td><img src="img/'.$_FILES['foto']['name'].'" height="50px"></td></tr>'; 
             }
         }
         //Recuperar el sexo si se ha rellenado
