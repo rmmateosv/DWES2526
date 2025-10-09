@@ -83,7 +83,8 @@ function rellenarMultipleCheck($campo, $valor, $atributo)
             <input type="checkbox" name="beca[]" id="aloj" value="Alojamiento" <?php
                                                                                 echo rellenarMultipleCheck('beca', 'Alojamiento', 'checked') ?>><br>
             <label for="observ">Observaciones</label>
-            <textarea name="observacion" id="observ"><?php echo recordarInput('observacion') ?></textarea>
+            <textarea name="observacion" id="observ"><?php 
+            echo recordarInput('observacion') ?></textarea>
         </fieldset>
         <input type="submit" value="Enviar" name="enviar">
         <input type="reset" value="Limpiar" name="limpiar">
@@ -115,8 +116,20 @@ function rellenarMultipleCheck($campo, $valor, $atributo)
             $error = true;
         }
         //5 Si la beca de alojamiento esá marcada, hay que rellenar observaciones
+        if(isset($_POST['beca']) && in_array('Alojamiento',$_POST['beca'])&&empty($_POST['observacion'])){
+            echo '<h3 style="color:red;">Error, la beca de alojamiento requiere observaciones</h3>';
+            $error = true;
+        }
         //6 Si tienen beca de transporte no puede tener la de alojamiento
-        //7 El tamaño del fichero debe ser menor de 1M
+         if(isset($_POST['beca']) && in_array('Alojamiento',$_POST['beca'])&&in_array('Transporte',$_POST['beca'])){
+            echo '<h3 style="color:red;">Error, la beca de alojamiento es incompatible con la de transporte</h3>';
+            $error = true;
+        }
+        //7 El tamaño del fichero debe ser menor de 1M = 1048576B
+        if(isset($_FILES['foto'])&&$_FILES['foto']['size']>1048576){
+            echo '<h3 style="color:red;">Error, el fichero no puede superar 1M</h3>';
+            $error = true;
+        }
 
         if(!isset($error)){
             //Crear tabla para mostrar datos
