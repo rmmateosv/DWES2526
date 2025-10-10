@@ -1,5 +1,6 @@
 <?php
 require_once 'Alumno.php';
+require_once 'Fichero.php';
 
 function recordarInput($campo)
 {
@@ -74,8 +75,11 @@ if (isset($_POST['enviar']) || isset($_POST['enviar2'])) {
                         (isset($_POST['beca'])?$_POST['beca']:null),
                         (isset($_POST['observacion'])?$_POST['observacion']:null)
                     );
-        //Mostrar el alumnos creado
-        $a->mostrar();
+        //Guardar alumno en el fichero
+        $f=new Fichero();
+        if(!$f->guardarAlumno($a)){
+            unset($a); //Destruir el objeto alumno para que no se pinte
+        }
         
     }
 }

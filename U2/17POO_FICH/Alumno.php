@@ -30,16 +30,17 @@ class Alumno{
         echo '<td><img src="../img/'.$this->foto.'" width="40px"></td>';
         echo '</tr>';
         echo '<tr>';
-        echo '<td>Fecha Matrícula:'.$this->fecha.'</td>';
-        echo '<td>Hora Matrícula:'.$this->hora.'></td>';
+        echo '<td>Fecha Matrícula: '.$this->fecha.'</td>';
+        echo '<td>Hora Matrícula: '.$this->hora.'</td>';
         echo '</tr>';
         echo '<tr>';
-        echo '<td>Ciclo:'.$this->ciclo.'</td>';
-        echo '<td>Asignaturas:'.$this->asig.'></td>';
+        echo '<td>Ciclo: '.$this->ciclo.'</td>';
+        //Implode convierte un array en un texto, delimitado por la cadena indicada
+        echo '<td>Asignaturas :['.($this->asig==null?'':implode(' ',$this->asig)).']</td>';
         echo '</tr>';
         echo '<tr>';
-        echo '<td>Becas:'.$this->beca.'</td>';
-        echo '<td>Observaciones:'.$this->observ.'></td>';
+        echo '<td>Becas: '.($this->beca==null?'':implode(' ',$this->beca)).'</td>';
+        echo '<td>Observaciones: '.$this->observ.'</td>';
         echo '</tr>';
         echo '</table>';
     }

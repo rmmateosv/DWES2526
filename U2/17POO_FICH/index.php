@@ -74,6 +74,12 @@ require_once 'controlador.php';
         <input type="reset" value="Limpiar" name="limpiar">
         <button type="submit" name=enviar2><img src="../img/bEnviar.png" alt="Enviar" height="16px"></button>
     </form>
+    <?php
+    if(isset($a)){
+         //Mostrar el alumno creado
+        $a->mostrar();
+    }
+    ?>
 </body>
 
 </html>
