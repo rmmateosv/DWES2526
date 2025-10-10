@@ -74,6 +74,8 @@ if (isset($_POST['enviar']) || isset($_POST['enviar2'])) {
                         (isset($_POST['beca'])?$_POST['beca']:null),
                         (isset($_POST['observacion'])?$_POST['observacion']:null)
                     );
+        //Mostrar el alumnos creado
+        $a->mostrar();
         
     }
 }

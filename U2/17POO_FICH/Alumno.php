@@ -17,14 +17,17 @@ class Alumno{
         $this->beca=$beca;
         $this->observ=$observ;
         //Subir foto al servidor si hay fichero
-        
+        if(isset($_FILES['foto'])){
+            move_uploaded_file($_FILES['foto']['tmp_name'],
+            '../img/'.$_FILES['foto']['name']);
+        }
     }
 
     public function mostrar(){
         echo '<table>';
         echo '<tr>';
         echo '<td>'.$this->nombre.'</td>';
-        echo '<td><img src="../img/'.$this->foto.'"></td>';
+        echo '<td><img src="../img/'.$this->foto.'" width="40px"></td>';
         echo '</tr>';
         echo '<tr>';
         echo '<td>Fecha Matrícula:'.$this->fecha.'</td>';
