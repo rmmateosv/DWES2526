@@ -72,7 +72,7 @@ if (isset($_POST['enviar']) || isset($_POST['enviar2'])) {
                         (isset($_POST['hora'])?$_POST['hora']:null),
                         (isset($_POST['ciclo'])?$_POST['ciclo']:null),
                         $_POST['asig'],
-                        (isset($_POST['beca'])?$_POST['beca']:null),
+                        (isset($_POST['beca'])?$_POST['beca']:array()),
                         (isset($_POST['observacion'])?$_POST['observacion']:null)
                     );
         //Guardar alumno en el fichero
