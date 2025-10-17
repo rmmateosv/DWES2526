@@ -44,6 +44,18 @@ class Alumno{
         echo '</tr>';
         echo '</table>';
     }
+    public function mostrar2(){
+        echo '<tr>';
+        echo '<td>'.$this->nombre.'</td>';
+        echo '<td><img src="../img/'.$this->foto.'" width="40px"></td>';
+        echo '<td>'.$this->sexo.'</td>';
+        echo '<td>'.$this->ciclo.'</td>';
+        echo '<td>'.$this->fecha.' '.$this->hora.'</td>';
+        echo '<td>'.($this->asig==null?'':implode(' ',$this->asig)).'</td>';
+        echo '<td>'.($this->beca==null?'':$this->beca).'</td>';
+        echo '<td>'.$this->observ.'</td>';
+        echo '</tr>';
+    }
     
 
     /**

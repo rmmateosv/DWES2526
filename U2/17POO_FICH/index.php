@@ -102,6 +102,12 @@ require_once 'controlador.php';
                     <td>Becas</td>
                     <td>Observaciones</td>
                 </tr>
+                <?php
+                $alumnos = $f->obtenerAlumnos();
+                foreach($alumnos as $a){
+                    $a->mostrar2();
+                }
+                ?>
             </table>
         </div>
     </div>

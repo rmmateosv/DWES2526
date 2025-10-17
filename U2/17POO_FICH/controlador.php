@@ -20,6 +20,8 @@ function rellenarMultipleCheck($campo, $valor, $atributo)
 {
     return (isset($_POST[$campo]) && in_array($valor, $_POST[$campo]) ? $atributo : '');
 }
+//Declaramos un objeto para trabajar con el fichero
+$f=new Fichero();
 
 //Comprobar si se ha pulsado en enviar
 if (isset($_POST['enviar']) || isset($_POST['enviar2'])) {
@@ -76,7 +78,6 @@ if (isset($_POST['enviar']) || isset($_POST['enviar2'])) {
                         (isset($_POST['observacion'])?$_POST['observacion']:null)
                     );
         //Guardar alumno en el fichero
-        $f=new Fichero();
         if(!$f->guardarAlumno($a)){
             unset($a); //Destruir el objeto alumno para que no se pinte
         }
