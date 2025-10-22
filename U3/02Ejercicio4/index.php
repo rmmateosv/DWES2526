@@ -11,6 +11,7 @@ require_once 'controlador.php';
 <body>
     <form action="" method="post">
         <h2>Calendario de Eventos</h2>
+        
         <table>
             <tr>
                 <td>Fecha</td>
@@ -21,17 +22,28 @@ require_once 'controlador.php';
             <!-- REcuperar los datos de la cookie y mostrarlos -->
              <?php
              if(isset($_COOKIE['datos'])){
-                foreach($_COOKIE['datos'] as $evento){
+                foreach(unserialize($_COOKIE['datos']) as $clave=>$evento){
                     echo '<tr>';
                     echo '<td>'.$evento->getFecha().'</td>';
                     echo '<td>'.$evento->getHora().'</td>';
                     echo '<td>'.$evento->getAsunto().'</td>';
-                    echo '<td><button type="submit" name="borrar">Borrar</button></td>';
+                    echo '<td><button type="submit" name="borrar" value="'.$clave.'">Borrar</button></td>';
                     echo '</tr>';
                 }
              }
              ?>
+             <tr>
+                <td><input type="date" name="fecha"></td>
+                <td> <input type="time" name="hora"></td>
+                <td><input type="text" name="asunto" placeholder="Asunto"></td>
+                <td><input type="submit" name="crear" value="Añadir"></td>
+             </tr>
         </table>
     </form>
+    <?php
+    if(isset($error)){
+        echo '<h3 style="color:red">'.$error.'</h3>';
+    }
+    ?>
 </body>
 </html>
