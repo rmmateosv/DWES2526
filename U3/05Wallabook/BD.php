@@ -10,6 +10,14 @@ class BD{
     {
         //Conexión con la BD
         try {
+            $host=getenv('RDS_HOST');
+            $puerto=getenv('RDS_PUERTO');
+            $bd=getenv('RDS_BD');
+            $us=getenv('RDS_USUARIO');
+            $ps=getenv('RDS_PS');
+            if(!$host || !$puerto || !$bd || !$us || !$ps){
+                throw new Exception('Rellena variables de entorno con las credenciales de acceso');
+            }
             
             $this->conexion = new PDO($url,$us,$ps);
         } 
