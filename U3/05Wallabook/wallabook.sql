@@ -6,8 +6,11 @@ create table usuarios(
 	id int primary key auto_increment,
 	email varchar(255) unique not null,
     ps blob not null,
-    nombre varchar(255) not null
+    nombre varchar(255) not null,
+    perfil enum('A','U') not null default 'U'
 )engine innodb;
+insert into usuarios values (default,'rmmateosv01@educarex.es',sha2('admin',512),'Administrador','A');
+
 
 create table libros(
 	id int primary key auto_increment,

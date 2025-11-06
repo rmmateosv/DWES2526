@@ -32,6 +32,20 @@ class BD{
             $error = 'ERROR GENÉRCO'.$th->getMessage();
         }
     }
+    public function login($email, $ps){
+        try {
+            //Select para comprobar si hay un registro con ese email y esa contraseña
+            $consulta = $this->conexion->prepare('SELECT * from usuarios 
+                where email=? and ps=sha2(?,512)');
+        } catch(PDOException $e){
+            global $error;
+            $error = 'ERROR BD'.$e->getMessage();
+        }
+        catch (\Throwable $th) {
+            global $error;
+            $error = 'ERROR GENÉRCO'.$th->getMessage();
+        }
+    }
 
     /**
      * Get the value of conexion

@@ -12,6 +12,17 @@ require_once 'controlador.php';
 
 <body>
     <div>
+        <form action="" method="post">
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email">
+            <label for="ps">Constraseña</label>
+            <input type="password" name="ps" id="ps">
+            <button type="submit" name="iniciar">Iniciar</button>
+            <button type="reset" name="cancelar">Cancelar</button>
+            <a href="registro.php">Registrarse</a>
+        </form>
+    </div>
+    <div>
         <?php
         if (isset($error)) {
             echo '<h3 style="color:red;">' . $error . '</h3>';
