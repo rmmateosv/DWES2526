@@ -1,6 +1,6 @@
 <?php
 require_once 'controlador.php';
-$bd=new BD();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
