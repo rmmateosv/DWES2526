@@ -14,8 +14,13 @@ require_once 'controlador.php';
 
 <body>
     <div class="container">
-        <h1 class="text-info">Bienvenido a WallaBook</h1>
+        <h1 class="text-info">Registro en WallaBook</h1>
         <form action="" method="post">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input class="form-control" type="text" name="nombre" id="nombre"
+                value="<?php echo (isset($_POST['nombre'])?$_POST['nombre']:'')?>">
+            </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input class="form-control" type="email" name="email" id="email" 
@@ -25,10 +30,14 @@ require_once 'controlador.php';
                 <label class="form-label" for="ps">Constraseña</label>
                 <input class="form-control" type="password" name="ps" id="ps">
             </div>
+            <div class="mb-3">
+                <label class="form-label" for="ps2">Repetir contraseña</label>
+                <input class="form-control" type="password" name="ps2" id="ps2">
+            </div>
 
-            <button type="submit" name="iniciar" class="btn btn-primary">Iniciar</button>
+            <button type="submit" name="crearUS" class="btn btn-primary">Crear Usuario</button>
             <button type="reset" name="cancelar" class="btn btn-danger">Cancelar</button>
-            <a href="registro.php" class="btn btn-success">Registrarse</a>
+            <a href="login.php" class="btn btn-success">Login</a>
         </form>
 
         <div>

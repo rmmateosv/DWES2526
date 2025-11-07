@@ -59,7 +59,31 @@ class BD{
         }
         return $resultado;
     }
-
+    public function crearUsuario(Usuarios $us, $ps){
+        $resultado = false;
+        try {
+            //Consulta INSERT con parámetros
+            $consulta = $this->conexion->prepare('INSERT into usuarios 
+                            values(default,?,sha2(?,512),?,?)');
+            $params=array($us->getEmail(),$ps,$us->getNombre(),$us->getPerfil());
+            if($consulta->execute($params)){
+                //Comprobar si se ha insertado realmente
+                if($consulta->rowCount()==1){
+                    //REcuperar el id del registro insertado y ponerlo en $us
+                    $us->setId($this->conexion->lastInsertId());
+                    $resultado=true;
+                }
+            }
+        } catch(PDOException $e){
+            global $error;
+            $error = 'ERROR BD'.$e->getMessage();
+        }
+        catch (\Throwable $th) {
+            global $error;
+            $error = 'ERROR GENÉRCO'.$th->getMessage();
+        }
+        return $resultado;
+    }
     /**
      * Get the value of conexion
      */ 
