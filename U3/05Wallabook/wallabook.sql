@@ -4,7 +4,7 @@ use wallabook;
 
 create table usuarios(
 	id int primary key auto_increment,
-	email varchar(255) unique not null,
+	email varchar(255) unique not null, -- Unique indica que es clave alternativa
     ps blob not null,
     nombre varchar(255) not null,
     perfil enum('A','U') not null default 'U'

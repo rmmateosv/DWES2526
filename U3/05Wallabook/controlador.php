@@ -13,7 +13,7 @@ if($bd->getConexion()!=null){
       else{
          $u=$bd->login($_POST['email'],$_POST['ps']);
          if($u==null){
-            $error='Error en el acceso';
+            $error=(isset($error)?'Excepción'.$error:'Error en el acceso');
          }
          else{
             $mensaje = 'Login correcto';

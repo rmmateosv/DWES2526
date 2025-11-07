@@ -33,10 +33,22 @@ class BD{
         }
     }
     public function login($email, $ps){
+        $resultado=null;
         try {
             //Select para comprobar si hay un registro con ese email y esa contraseña
             $consulta = $this->conexion->prepare('SELECT * from usuarios 
                 where email=? and ps=sha2(?,512)');
+            $params = array($email,$ps);
+            //Ejecutar la consulta pasando los parámetros que sustituye a las ?
+            //execute: Devuelve true si el select se ejecuta, pero eso 
+            //no quiere decir que el select devuelva algún registro.
+            if($consulta->execute($params)){
+                //Comprobar si el select ha encontrado el usuario por email y ps
+                if($fila=$consulta->fetch()){
+                    //Los datos son correctos, se encuentra un usuario
+                    $resultado = new Usuarios($fila['id'],$fila['email'],$fila['nombre'],$fila['perfil']);
+                }
+            }
         } catch(PDOException $e){
             global $error;
             $error = 'ERROR BD'.$e->getMessage();
@@ -45,6 +57,7 @@ class BD{
             global $error;
             $error = 'ERROR GENÉRCO'.$th->getMessage();
         }
+        return $resultado;
     }
 
     /**
