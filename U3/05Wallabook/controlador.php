@@ -29,6 +29,9 @@ if($bd->getConexion()!=null){
          $error='Las contraseñas deben coincidir';
       }
       else{
+         //Validar si email duplicado
+
+         
          $u= new Usuarios(null,$_POST['email'],$_POST['nombre'],'U');
          if($bd->crearUsuario($u,$_POST['ps'])){
             $mensaje='Usuario creado con ID:'.$u->getId();
