@@ -1,5 +1,6 @@
 <?php
 require_once 'BD.php';
+session_start();
 
 //Crear conexión a la BD
 $bd = new BD();
@@ -13,7 +14,10 @@ if ($bd->getConexion() != null) {
          if ($u == null) {
             $error = (isset($error) ? 'Excepción' . $error : 'Error en el acceso');
          } else {
-            $mensaje = 'Login correcto';
+            //Guardar el us logeado en la sesión
+            $_SESSION['us'] = $u;
+            //Redirigir a index
+            header('location:index.php');
          }
       }
    } elseif (isset($_POST['crearUS'])) {
