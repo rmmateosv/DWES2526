@@ -9,8 +9,9 @@ create table usuarios(
     nombre varchar(255) not null,
     perfil enum('A','U') not null default 'U'
 )engine innodb;
-insert into usuarios values (default,'rmmateosv01@educarex.es',sha2('admin',512),'Administrador','A');
+insert into usuarios values (default,'rmmateosv0111@educarex.es',sha2('admin',512),'Administrador','A');
 
+select last_insert_id();
 
 create table libros(
 	id int primary key auto_increment,

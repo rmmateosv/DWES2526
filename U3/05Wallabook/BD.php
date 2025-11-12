@@ -84,6 +84,29 @@ class BD{
         }
         return $resultado;
     }
+    public function obtenerUsuario($email){
+        $resultado = null;
+        try {
+            $consulta = $this->conexion->prepare('SELECT * from usuarios 
+                        where email = ?');
+            $params = array($email);
+            if($consulta->execute($params)){
+                if($fila=$consulta->fetch()){
+                    $resultado = new Usuarios($fila['id'],$fila['email'],
+                    $fila['nombre'],$fila['perfil']);
+                }
+            }
+        } catch(PDOException $e){
+            global $error;
+            $error = 'ERROR BD'.$e->getMessage();
+        }
+        catch (\Throwable $th) {
+            global $error;
+            $error = 'ERROR GENÉRCO'.$th->getMessage();
+        }
+
+        return $resultado;
+    }
     /**
      * Get the value of conexion
      */ 
