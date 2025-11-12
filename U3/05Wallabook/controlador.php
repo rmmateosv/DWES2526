@@ -43,4 +43,9 @@ if ($bd->getConexion() != null) {
          }
       }
    }
+   elseif(isset($_POST['cerrar'])){
+      //Cerrar sesión y redirigir a login
+      session_destroy();
+      header('location:login.php');
+   }
 }
