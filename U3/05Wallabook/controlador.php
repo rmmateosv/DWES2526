@@ -48,4 +48,22 @@ if ($bd->getConexion() != null) {
       session_destroy();
       header('location:login.php');
    }
+   elseif(isset($_POST['crearL'])){
+      //Chequear campos rellenos
+      if(empty($_POST['isbn']) || empty($_POST['titulo']) || empty($_POST['descripcion']) ||
+      empty($_POST['autor']) || empty($_POST['precio']) || empty($_FILES['foto']['name'])){
+         $error = 'Todos los campos son obligatorios';
+      }
+      else{
+         $libro = new Libros(null,date('Y-m-d H:i:s'),$_POST['isbn'],$_POST['titulo'],
+         $_POST['autor'],$_POST['descripcion'],$_FILES['foto'],'Disponible',$_POST['precio'],
+         $_SESSION['us']->getId(),null);
+         if($bd->crearLibro($libro)){
+            $mensaje='Libro Creado con id:'.$libro->getId();
+         }
+         else{
+            $error = (isset($error) ? 'Excepción' . $error : 'Error al crear el libro');
+         }
+      }
+   }
 }

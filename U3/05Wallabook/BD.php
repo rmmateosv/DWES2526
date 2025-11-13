@@ -107,6 +107,24 @@ class BD{
 
         return $resultado;
     }
+    public function crearLibro(Libros $libro){
+        $resultado=false;
+        try {
+            //Crear el libro
+            $consulta = $this->conexion->prepare('INSERT into libros values 
+            (default,?,?,?,?,?,?,?,?,?,null)');
+            $params = ();
+            //Subir la foto a ?????
+        }  catch(PDOException $e){
+            global $error;
+            $error = 'ERROR BD'.$e->getMessage();
+        }
+        catch (\Throwable $th) {
+            global $error;
+            $error = 'ERROR GENÉRCO'.$th->getMessage();
+        }
+        return $resultado;
+    }
     /**
      * Get the value of conexion
      */ 
