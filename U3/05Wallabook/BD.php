@@ -113,8 +113,23 @@ class BD{
             //Crear el libro
             $consulta = $this->conexion->prepare('INSERT into libros values 
             (default,?,?,?,?,?,?,?,?,?,null)');
-            $params = ();
-            //Subir la foto a ?????
+            $params = array($libro->getFechaC(),
+                            $libro->getIsbn(),
+                            $libro->getTitulo(),
+                            $libro->getAutor(),
+                            $libro->getDescripcion(),
+                            '/'.$libro->getVendedor().'/'.$libro->getFechaC().$libro->getCarpetaS3fotos()['name'],
+                            $libro->getEstado(),
+                            $libro->getPrecio(),
+                            $libro->getVendedor());
+            if($consulta->execute($params) && $consulta->rowCount()==1){
+                //Rellenar el id del libro
+                $libro->setId($this->conexion->lastInsertId());
+                //Subir la foto a S3
+
+                $resultado=true;
+            }
+            
         }  catch(PDOException $e){
             global $error;
             $error = 'ERROR BD'.$e->getMessage();

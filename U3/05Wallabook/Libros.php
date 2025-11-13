@@ -8,7 +8,7 @@
         {
             $this->id=$id;
             $this->fechaC=$fechaC;
-            $this->fechaC=$fechaC;
+            $this->isbn=$isbn;
             $this->titulo=$titulo;
             $this->autor=$autor;
             $this->descripcion=$descripcion;
