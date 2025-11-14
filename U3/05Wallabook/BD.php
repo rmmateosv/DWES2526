@@ -2,7 +2,7 @@
 require_once 'Usuarios.php';
 require_once 'Libros.php';
 require_once 'Mensajes.php';
-
+require_once 'S3.php';
 class BD{
     private $conexion=null;
 
@@ -111,6 +111,7 @@ class BD{
         $resultado=false;
         try {
             //Crear el libro
+            $rutaS3= $libro->getVendedor().'/'.$libro->getFechaC().$libro->getCarpetaS3fotos()['name'];
             $consulta = $this->conexion->prepare('INSERT into libros values 
             (default,?,?,?,?,?,?,?,?,?,null)');
             $params = array($libro->getFechaC(),
@@ -118,7 +119,7 @@ class BD{
                             $libro->getTitulo(),
                             $libro->getAutor(),
                             $libro->getDescripcion(),
-                            '/'.$libro->getVendedor().'/'.$libro->getFechaC().$libro->getCarpetaS3fotos()['name'],
+                            $rutaS3,
                             $libro->getEstado(),
                             $libro->getPrecio(),
                             $libro->getVendedor());
@@ -126,11 +127,56 @@ class BD{
                 //Rellenar el id del libro
                 $libro->setId($this->conexion->lastInsertId());
                 //Subir la foto a S3
-
-                $resultado=true;
+                $s3 = new S3();
+                if($s3->cargarObjeto($libro->getCarpetaS3fotos()['tmp_name'],$rutaS3)){
+                    $resultado=true;
+                }
+                else{
+                    //SI NO SE SUBE LA FOTO, BORRAMOS EL LIBRO
+                    $consulta=$this->conexion->prepare('DELETE from libros where id=?');
+                    $params=array($libro->getId());
+                    if($consulta->execute($params) && $consulta->rowCount()==1){
+                        $error='Error, libro no creado porque no se ha podido subir la foto';
+                    }
+                    else{
+                        //No ha subido foto y libro está creado
+                        $error='Error, libro se ha creado, pero no se ha podido subir la foto';
+                    }
+                }
+                
             }
             
         }  catch(PDOException $e){
+            global $error;
+            $error = 'ERROR BD'.$e->getMessage();
+        }
+        catch (\Throwable $th) {
+            global $error;
+            $error = 'ERROR GENÉRCO'.$th->getMessage();
+        }
+        return $resultado;
+    }
+    public function obtenerMisLibros($idUsuario){
+        $resultado = array();
+        try {
+            $consulta = $this->conexion->prepare('SELECT * from libros where vendedor = ?');
+            $params =  array($idUsuario);
+            if($consulta->execute($params)){
+                while($fila=$consulta->fetch()){
+                    $resultado[]=new Libros($fila['id'],
+                    $fila['fechaC'],
+                    $fila['isbn'],
+                    $fila['titulo'],
+                    $fila['autor'],
+                    $fila['descripcion'],
+                    $fila['carpetaS3Fotos'],
+                    $fila['estado'],
+                    $fila['precio'],
+                    $fila['vendedor'],
+                    $fila['comprador']);
+                }
+            }
+        } catch(PDOException $e){
             global $error;
             $error = 'ERROR BD'.$e->getMessage();
         }

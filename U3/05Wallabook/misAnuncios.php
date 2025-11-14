@@ -34,6 +34,10 @@ echo '<h4>Mis Anuncios</h4>';
         
     </form>
     <form action="" method="post">
+        <?php 
+        //Recuperar los libros del usuario conectado
+        $libros = $bd->obtenerMisLibros($_SESSION['us']->getId());
+        ?>
         <table class="table">
             <thead>
                 <tr>
@@ -51,7 +55,23 @@ echo '<h4>Mis Anuncios</h4>';
                 </tr>
             </thead>
             <tbody>
-
+                <?php 
+                foreach($libros as $l){
+                    echo '<tr>';
+                    echo '<td>'. $l->getId().'</td>';
+                    echo '<td>'. $l->getIsbn().'</td>';
+                    echo '<td>'. $l->getTitulo().'</td>';
+                    echo '<td>'. $l->getDescripcion().'</td>';
+                    echo '<td>'. $l->getAutor().'</td>';
+                    echo '<td>'. $l->getFechaC().'</td>';
+                    echo '<td>'. $l->getEstado().'</td>';
+                    echo '<td>'. $l->getPrecio().'</td>';
+                    echo '<td>'. $l->getComprador().'</td>';
+                    echo '<td><img width="50px" src="https://s3.us-east-1.amazonaws.com/'.$bucket.'/'.$l->getCarpetaS3fotos().'"/></td>';
+                    echo '<td>botones</td>';
+                    echo '</tr>';
+                }
+                ?>
             </tbody>
 
         </table>
