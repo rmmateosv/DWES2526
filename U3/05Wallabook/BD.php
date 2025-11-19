@@ -186,6 +186,58 @@ class BD{
         }
         return $resultado;
     }
+    public function obtenerLibro($id){
+        $resultado = null;
+        try {
+            $consulta = $this->conexion->prepare('SELECT * from libros where id = ?');
+            $params=array($id);
+            if($consulta->execute($params)){
+                if($fila=$consulta->fetch()){
+                    $resultado = new Libros($fila['id'],
+                                                $fila['fechaC'],
+                                                $fila['isbn'],
+                                                $fila['titulo'],
+                                                $fila['autor'],
+                                                $fila['descripcion'],
+                                                $fila['carpetaS3Fotos'],
+                                                $fila['estado'],
+                                                $fila['precio'],
+                                                $fila['vendedor'],
+                                                $fila['comprador']);
+                }
+            }
+        } 
+         catch(PDOException $e){
+            global $error;
+            $error = 'ERROR BD'.$e->getMessage();
+        }
+        catch (\Throwable $th) {
+             global $error;
+            $error = 'ERROR GENÉRCO'.$th->getMessage();
+        }
+
+        return $resultado;
+    }
+    public function borrarLibro($id){
+        $resultado = false;
+        try {
+            $consulta = $this->conexion->prepare('DELETE from libros where id = ?');
+            $params=array($id);
+            if($consulta->execute($params) && $consulta->rowCount()==1){
+                $resultado = true;
+            }
+        } 
+         catch(PDOException $e){
+            global $error;
+            $error = 'ERROR BD'.$e->getMessage();
+        }
+        catch (\Throwable $th) {
+             global $error;
+            $error = 'ERROR GENÉRCO'.$th->getMessage();
+        }
+
+        return $resultado;
+    }
     /**
      * Get the value of conexion
      */ 

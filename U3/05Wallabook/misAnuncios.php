@@ -31,10 +31,10 @@ echo '<h4>Mis Anuncios</h4>';
             </div>
             <button type="submit" class="btn btn-outline-primary col-sm-2" name="crearL">+</button>
         </div>
-        
+
     </form>
-    <form action="" method="post">
-        <?php 
+    <form action="" method="post" enctype="multipart/form-data">
+        <?php
         //Recuperar los libros del usuario conectado
         $libros = $bd->obtenerMisLibros($_SESSION['us']->getId());
         ?>
@@ -54,28 +54,55 @@ echo '<h4>Mis Anuncios</h4>';
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
-            
+
             <tbody>
-                <?php 
-                foreach($libros as $l){
-                    echo '<tr>';
-                    echo '<td>'. $l->getId().'</td>';
-                    echo '<td>'. $l->getIsbn().'</td>';
-                    echo '<td>'. $l->getTitulo().'</td>';
-                    echo '<td>'. $l->getDescripcion().'</td>';
-                    echo '<td>'. $l->getAutor().'</td>';
-                    echo '<td>'. $l->getFechaC().'</td>';
-                    echo '<td>'. $l->getEstado().'</td>';
-                    echo '<td>'. $l->getPrecio().'</td>';
-                    echo '<td>'. $l->getComprador().'</td>';
-                    echo '<td><img width="50px" src="https://s3.us-east-1.amazonaws.com/'.$bucket.'/'.$l->getCarpetaS3fotos().'"/></td>';
-                    echo '<td>';
-                    if($l->getComprador()==null){
-                    echo '<button name="editarL" value="'.$l->getId().'" class="btn btn-outline-success">Editar</button>';
-                    echo '<button name="borrarL" value="'.$l->getId().'" class="btn btn-outline-danger">Borrar</button>';
+                <?php
+                foreach ($libros as $l) {
+                    if (isset($_POST['editarL']) && $_POST['editarL'] == $l->getId()) {
+                        //Poner campos editables
+                        echo '<tr>';
+                        echo '<td>' . $l->getId() . '</td>';
+                        echo '<td><input type="text" name="isbn" value="' . $l->getIsbn() . '"></td>';
+                        echo '<td><input type="text" name="titulo" value="' . $l->getTitulo() . '"></td>';
+                        echo '<td><input type="text" name="descripcion" value="' . $l->getDescripcion() . '"></td>';
+                        echo '<td><input type="text" name="autor" value="' . $l->getAutor() . '"></td>';
+                        echo '<td>' . $l->getFechaC() . '</td>';
+                        echo '<td>' ;
+                        echo '<select name="estado">';
+                        echo '<option '.($l->getEstado()=='Disponible'?'selected':'').'>Disponible</option>';
+                        echo '<option '.($l->getEstado()=='Reservado'?'selected':'').'>Reservado</option>';
+                        echo '</select>';
+                        echo '</td>';
+                        echo '<td><input type="number" step="0.1" name="precio" value="' . $l->getPrecio() . '"></td>';
+                        echo '<td>' . $l->getComprador() . '</td>';
+                        echo '<td>';
+                        echo '<input type="file" name ="foto">';
+                        echo'<img width="50px" src="https://s3.us-east-1.amazonaws.com/' . $bucket . '/' . $l->getCarpetaS3fotos() . '"/></td>';
+                        echo '<td>';
+                        echo '<button name="guardarL" value="' . $l->getId() . '" class="btn btn-outline-success">Guardar</button>';
+                        echo '<button name="cancelarL" value="' . $l->getId() . '" class="btn btn-outline-danger">Cancelar</button>';
+                        echo '</td>';
+                        echo '</tr>';
+                    } else {
+                        echo '<tr>';
+                        echo '<td>' . $l->getId() . '</td>';
+                        echo '<td>' . $l->getIsbn() . '</td>';
+                        echo '<td>' . $l->getTitulo() . '</td>';
+                        echo '<td>' . $l->getDescripcion() . '</td>';
+                        echo '<td>' . $l->getAutor() . '</td>';
+                        echo '<td>' . $l->getFechaC() . '</td>';
+                        echo '<td>' . $l->getEstado() . '</td>';
+                        echo '<td>' . $l->getPrecio() . '</td>';
+                        echo '<td>' . $l->getComprador() . '</td>';
+                        echo '<td><img width="50px" src="https://s3.us-east-1.amazonaws.com/' . $bucket . '/' . $l->getCarpetaS3fotos() . '"/></td>';
+                        echo '<td>';
+                        if ($l->getComprador() == null) {
+                            echo '<button name="editarL" value="' . $l->getId() . '" class="btn btn-outline-success">Editar</button>';
+                            echo '<button name="borrarL" value="' . $l->getId() . '" class="btn btn-outline-danger">Borrar</button>';
+                        }
+                        echo '</td>';
+                        echo '</tr>';
                     }
-                    echo '</td>';
-                    echo '</tr>';
                 }
                 ?>
             </tbody>
