@@ -54,6 +54,7 @@ echo '<h4>Mis Anuncios</h4>';
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
+            
             <tbody>
                 <?php 
                 foreach($libros as $l){
@@ -68,7 +69,12 @@ echo '<h4>Mis Anuncios</h4>';
                     echo '<td>'. $l->getPrecio().'</td>';
                     echo '<td>'. $l->getComprador().'</td>';
                     echo '<td><img width="50px" src="https://s3.us-east-1.amazonaws.com/'.$bucket.'/'.$l->getCarpetaS3fotos().'"/></td>';
-                    echo '<td>botones</td>';
+                    echo '<td>';
+                    if($l->getComprador()==null){
+                    echo '<button name="editarL" value="'.$l->getId().'" class="btn btn-outline-success">Editar</button>';
+                    echo '<button name="borrarL" value="'.$l->getId().'" class="btn btn-outline-danger">Borrar</button>';
+                    }
+                    echo '</td>';
                     echo '</tr>';
                 }
                 ?>
