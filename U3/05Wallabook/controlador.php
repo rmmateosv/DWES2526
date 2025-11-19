@@ -66,4 +66,20 @@ if ($bd->getConexion() != null) {
          }
       }
    }
+   elseif(isset($_POST['borrarL'])){
+      //Chequear que el libro existe y se puede borrar si no hay comprador
+      $l = $bd->obtenerLibro($_POST['borrarL']);
+      if($l!=null && $l->getComprador()==null){
+         //Se puede borrar
+         if($bd->borrarLibro($l->getId())){
+            $mensaje='Libro borrado';
+         }
+         else{
+            $error = (isset($error) ? 'Excepción' . $error : 'No se puede borrar el libro');   
+         }
+      }
+      else{
+         $error = (isset($error) ? 'Excepción' . $error : 'No existe el libro o está vendido');
+      }
+   }
 }
