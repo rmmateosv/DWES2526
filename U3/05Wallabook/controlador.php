@@ -82,7 +82,7 @@ if ($bd->getConexion() != null) {
          $error = (isset($error) ? 'Excepción' . $error : 'No existe el libro o está vendido');
       }
    }
-   elseif ($_POST['guardarL']) {
+   elseif (isset($_POST['guardarL'])) {
        if(empty($_POST['isbn']) || empty($_POST['titulo']) || empty($_POST['descripcion']) ||
       empty($_POST['autor']) || empty($_POST['precio'])){
          $error = 'Todos los campos son obligatorios';

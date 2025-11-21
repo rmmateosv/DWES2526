@@ -1,8 +1,9 @@
 <?php
 require_once 'cabecera.php';
-echo '<h4>Mis Anuncios</h4>';
+
 ?>
 <div class="container">
+    <h4>Mis Anuncios</h4>
     <form action="" method="post" enctype="multipart/form-data">
         <div class="form-group row">
             <label for="isbn" class="col-sm-2 col-form-label">ISBN</label>
