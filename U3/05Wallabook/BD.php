@@ -238,6 +238,41 @@ class BD{
 
         return $resultado;
     }
+     public function modificarLibro(Libros $libro){
+        $resultado = false;
+        try {
+            //Comprobar si hay foto
+            if (!empty($libro->getCarpetaS3fotos()['name'])) {
+                $rutaS3=$_SESSION['us']->getId().'/'.$libro;
+                 $consulta = $this->conexion->prepare('UPDATE libros set
+            isbn =?, titulo=?, descripcion=?, autor=?, precio=?, estado=?, carpetaS3Fotos= ?
+            where id = ?');
+              $params = array(
+                            $libro->getIsbn(),
+                            $libro->getTitulo(),
+                            $libro->getDescripcion(),
+                            $libro->getAutor(),
+                            $libro->getPrecio(),
+                            $libro->getEstado(),
+                            $rutaS3,$libro->getId());
+            }else{
+                $consulta = $this->conexion->prepare('UPDATE libros set
+            isbn =?, titulo=?, descripcion=?, autor=?, precio=?, estado=?
+            where id = ?');
+            
+            }
+            $consulta = $this->conexion->prepare('UPDATE libros set
+            isbn =?, titulo=?, descripcion=?, autor=?, precio=?, estado=?, foto= ?
+            where id = ?');
+        }    catch(PDOException $e){
+            global $error;
+            $error = 'ERROR BD'.$e->getMessage();
+        }
+        catch (\Throwable $th) {
+             global $error;
+            $error = 'ERROR GENÉRCO'.$th->getMessage();
+        }
+    }
     /**
      * Get the value of conexion
      */ 

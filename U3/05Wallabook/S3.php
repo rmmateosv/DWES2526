@@ -3,7 +3,7 @@ require_once 'vendor/autoload.php';
 
 use Aws\S3\S3Client;
 
-$bucket = 'rmmateosv91.app.wallabook';
+$bucket = 'rmmateosv01.app.wallabook';
 
 
 class S3

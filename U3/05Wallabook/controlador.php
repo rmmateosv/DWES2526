@@ -82,4 +82,20 @@ if ($bd->getConexion() != null) {
          $error = (isset($error) ? 'Excepción' . $error : 'No existe el libro o está vendido');
       }
    }
+   elseif ($_POST['guardarL']) {
+       if(empty($_POST['isbn']) || empty($_POST['titulo']) || empty($_POST['descripcion']) ||
+      empty($_POST['autor']) || empty($_POST['precio'])){
+         $error = 'Todos los campos son obligatorios';
+      }
+      else{
+         $l= new Libros($_POST['guardarL'], null,$_POST['isbn'],$_POST['titulo'],$_POST['autor'],$_POST['descripcion'],$_FILES['foto'],$_POST['estado'],$_POST['precio'],null,null);
+         //Modificar el libro
+         if ($bd->modificarLibro($l)) {
+            $mensaje="Libro modificado";
+
+         }else{
+             $error = (isset($error) ? 'Excepción' . $error : 'Error al modificar el libro');
+         }
+      }
+   }
 }
