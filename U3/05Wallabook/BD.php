@@ -293,6 +293,38 @@ class BD
         }
         return $resultado;
     }
+    public function obtenerAnuncios(){
+        $resultado = array();
+        try {
+            $consulta = $this->conexion->prepare('SELECT * from libros
+                where estado = ? and vendedor != ? order by fechaC desc');
+                $params = array('disponible',$_SESSION['us']->getId());
+            if($consulta->execute($params)){
+                while($fila=$consulta->fetch()){
+                    $resultado[]=new Libros(
+                        $fila['id'],
+                        $fila['fechaC'],
+                        $fila['isbn'],
+                        $fila['titulo'],
+                        $fila['autor'],
+                        $fila['descripcion'],
+                        $fila['carpetaS3Fotos'],
+                        $fila['estado'],
+                        $fila['precio'],
+                        $fila['vendedor'],
+                        $fila['comprador']
+                    ); 
+                }
+            }
+        } catch (PDOException $e) {
+            global $error;
+            $error = 'ERROR BD' . $e->getMessage();
+        } catch (\Throwable $th) {
+            global $error;
+            $error = 'ERROR GENÉRCO' . $th->getMessage();
+        }
+        return $resultado;
+    }
     /**
      * Get the value of conexion
      */
