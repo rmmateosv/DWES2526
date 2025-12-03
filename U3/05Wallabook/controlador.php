@@ -98,4 +98,12 @@ if ($bd->getConexion() != null) {
          }
       }
    }
+   elseif (isset($_POST['bComprar'])) {
+      //REcuperar datos del libro que se ha comprado
+      $libro=$bd->obtenerLibro($_POST['bComprar']);
+      if($libro!=null){
+         //Registrar venta
+      
+      }
+   }
 }
