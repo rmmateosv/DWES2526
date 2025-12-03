@@ -222,6 +222,42 @@ class BD
 
         return $resultado;
     }
+    public function obtenerLibroAmpliado($id)
+    {
+        $resultado = null;
+        try {
+            $consulta = $this->conexion->prepare('SELECT * from libros l
+                                                        join usuarios u on vendedor = u.id
+                                                        left join usuarios u2 on comprador = u2.id
+                                                        where l.id = ?');
+            $params = array($id);
+            if ($consulta->execute($params)) {
+                if ($fila = $consulta->fetch()) {
+                    $resultado = new Libros(
+                        $fila[0], //Id de posición 0
+                        $fila['fechaC'],
+                        $fila['isbn'],
+                        $fila['titulo'],
+                        $fila['autor'],
+                        $fila['descripcion'],
+                        $fila['carpetaS3Fotos'],
+                        $fila['estado'],
+                        $fila['precio'],
+                        new Usuarios($fila['vendedor'],$fila[12],$fila[14],$fila[15]),
+                        new Usuarios($fila['comprador'],$fila[18],$fila[20],$fila[21])
+                    );
+                }
+            }
+        } catch (PDOException $e) {
+            global $error;
+            $error = 'ERROR BD' . $e->getMessage();
+        } catch (\Throwable $th) {
+            global $error;
+            $error = 'ERROR GENÉRCO' . $th->getMessage();
+        }
+
+        return $resultado;
+    }
     public function borrarLibro($id)
     {
         $resultado = false;
@@ -317,6 +353,39 @@ class BD
                 }
             }
         } catch (PDOException $e) {
+            global $error;
+            $error = 'ERROR BD' . $e->getMessage();
+        } catch (\Throwable $th) {
+            global $error;
+            $error = 'ERROR GENÉRCO' . $th->getMessage();
+        }
+        return $resultado;
+    }
+    public function registrarVenta(Libros $l){
+        $resultado = false;
+        try {
+            //La venta supone, rellenar el comprador en la tabla libros y
+            //Aumentar el nº de ventas del usuario vendedor.
+            //Como hay que hacer dos operaciones (dos updates)
+            //tenemos que usar un transacción, para asegurar que 
+            //o se hacen las dos o no se hace ninguna
+
+            //Iniciar transacción
+            $this->conexion->beginTransaction();
+            $consulta = $this->conexion->prepare('UPDATE libros set comprador = ?, estado=? where id=?');
+            $params = array($_SESSION['us']->getId(),'Vendido',$l->getId());
+            if($consulta->execute($params) && $consulta->rowCount()==1){
+                //Actualizar el nº de ventas
+                $consulta=$this->conexion->prepare('UPDATE usuarios set numVentas = numVentas+1 where id=?');
+                $params = array($l->getVendedor());
+                if($consulta->execute($params) && $consulta->rowCount()==1){
+                    $this->conexion->commit();
+                    $resultado=true;
+                }else{
+                    $this->conexion->rollback();
+                }
+            }
+        }  catch (PDOException $e) {
             global $error;
             $error = 'ERROR BD' . $e->getMessage();
         } catch (\Throwable $th) {

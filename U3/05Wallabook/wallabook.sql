@@ -35,5 +35,7 @@ create table mensajes(
     libro int not null,
     foreign key (emisor) references usuarios(id) on update cascade on delete restrict,
     foreign key (libro) references libros(id) on update cascade on delete restrict
-)
+);
+
+alter table usuarios add (numVentas int not null default 0);
 

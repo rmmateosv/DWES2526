@@ -7,11 +7,12 @@ require_once 'cabecera.php';
         if (!isset($_GET['libro'])) {
             header('location:index.php');
         }
-        $libro = $bd->obtenerLibro($_GET['libro']);
+        $libro = $bd->obtenerLibroAmpliado($_GET['libro']);
         if ($libro == null) {
             header('location:index.php');
         }
         echo '<h3>Detalle Libro: ' . $libro->getTitulo() . '</h3>';
+        echo '<h3>Vendedor: ' . $libro->getVendedor()->getNombre() . '</h3>';
         echo '<div style="display: flex; flex-direction:column; align-items:center;">';
         echo '<img width="100px" src="https://s3.us-east-1.amazonaws.com/' . $bucket .
             '/' . $libro->getCarpetaS3fotos() . '">';

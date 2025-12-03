@@ -42,68 +42,80 @@ if ($bd->getConexion() != null) {
             }
          }
       }
-   }
-   elseif(isset($_POST['cerrar'])){
+   } elseif (isset($_POST['cerrar'])) {
       //Cerrar sesión y redirigir a login
       session_destroy();
       header('location:login.php');
-   }
-   elseif(isset($_POST['crearL'])){
+   } elseif (isset($_POST['crearL'])) {
       //Chequear campos rellenos
-      if(empty($_POST['isbn']) || empty($_POST['titulo']) || empty($_POST['descripcion']) ||
-      empty($_POST['autor']) || empty($_POST['precio']) || empty($_FILES['foto']['name'])){
+      if (
+         empty($_POST['isbn']) || empty($_POST['titulo']) || empty($_POST['descripcion']) ||
+         empty($_POST['autor']) || empty($_POST['precio']) || empty($_FILES['foto']['name'])
+      ) {
          $error = 'Todos los campos son obligatorios';
-      }
-      else{
-         $libro = new Libros(null,date('Y-m-d H:i:s'),$_POST['isbn'],$_POST['titulo'],
-         $_POST['autor'],$_POST['descripcion'],$_FILES['foto'],'Disponible',$_POST['precio'],
-         $_SESSION['us']->getId(),null);
-         if($bd->crearLibro($libro)){
-            $mensaje='Libro Creado con id:'.$libro->getId();
-         }
-         else{
+      } else {
+         $libro = new Libros(
+            null,
+            date('Y-m-d H:i:s'),
+            $_POST['isbn'],
+            $_POST['titulo'],
+            $_POST['autor'],
+            $_POST['descripcion'],
+            $_FILES['foto'],
+            'Disponible',
+            $_POST['precio'],
+            $_SESSION['us']->getId(),
+            null
+         );
+         if ($bd->crearLibro($libro)) {
+            $mensaje = 'Libro Creado con id:' . $libro->getId();
+         } else {
             $error = (isset($error) ? 'Excepción' . $error : 'Error al crear el libro');
          }
       }
-   }
-   elseif(isset($_POST['borrarL'])){
+   } elseif (isset($_POST['borrarL'])) {
       //Chequear que el libro existe y se puede borrar si no hay comprador
       $l = $bd->obtenerLibro($_POST['borrarL']);
-      if($l!=null && $l->getComprador()==null){
+      if ($l != null && $l->getComprador() == null) {
          //Se puede borrar
-         if($bd->borrarLibro($l->getId())){
-            $mensaje='Libro borrado';
+         if ($bd->borrarLibro($l->getId())) {
+            $mensaje = 'Libro borrado';
+         } else {
+            $error = (isset($error) ? 'Excepción' . $error : 'No se puede borrar el libro');
          }
-         else{
-            $error = (isset($error) ? 'Excepción' . $error : 'No se puede borrar el libro');   
-         }
-      }
-      else{
+      } else {
          $error = (isset($error) ? 'Excepción' . $error : 'No existe el libro o está vendido');
       }
-   }
-   elseif (isset($_POST['guardarL'])) {
-       if(empty($_POST['isbn']) || empty($_POST['titulo']) || empty($_POST['descripcion']) ||
-      empty($_POST['autor']) || empty($_POST['precio'])){
+   } elseif (isset($_POST['guardarL'])) {
+      if (
+         empty($_POST['isbn']) || empty($_POST['titulo']) || empty($_POST['descripcion']) ||
+         empty($_POST['autor']) || empty($_POST['precio'])
+      ) {
          $error = 'Todos los campos son obligatorios';
-      }
-      else{
-         $l= new Libros($_POST['guardarL'], null,$_POST['isbn'],$_POST['titulo'],$_POST['autor'],$_POST['descripcion'],$_FILES['foto'],$_POST['estado'],$_POST['precio'],null,null);
+      } else {
+         $l = new Libros($_POST['guardarL'], null, $_POST['isbn'], $_POST['titulo'], $_POST['autor'], $_POST['descripcion'], $_FILES['foto'], $_POST['estado'], $_POST['precio'], null, null);
          //Modificar el libro
          if ($bd->modificarLibro($l)) {
-            $mensaje="Libro modificado";
-
-         }else{
-             $error = (isset($error) ? 'Excepción' . $error : 'Error al modificar el libro');
+            $mensaje = "Libro modificado";
+         } else {
+            $error = (isset($error) ? 'Excepción' . $error : 'Error al modificar el libro');
          }
       }
-   }
-   elseif (isset($_POST['bComprar'])) {
+   } elseif (isset($_POST['bComprar'])) {
       //REcuperar datos del libro que se ha comprado
-      $libro=$bd->obtenerLibro($_POST['bComprar']);
-      if($libro!=null){
+      $libro = $bd->obtenerLibro($_POST['bComprar']);
+      if ($libro != null && $libro->getComprador() == null) {
          //Registrar venta
-      
+         if ($bd->registrarVenta($libro)) {
+            //Enviar correo a comprador
+            //Enviar correo a vendedor
+
+            $mensaje = "Libro comprado";
+         } else {
+            $error = (isset($error) ? 'Excepción' . $error : 'Error al comprar el libro');
+         }
+      } else {
+         $error = (isset($error) ? 'Excepción' . $error : 'El libro no está dsiponible');
       }
    }
 }
