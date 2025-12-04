@@ -64,7 +64,7 @@ class BD
         try {
             //Consulta INSERT con parámetros
             $consulta = $this->conexion->prepare('INSERT into usuarios 
-                            values(default,?,sha2(?,512),?,?)');
+                            values(default,?,sha2(?,512),?,?,default)');
             $params = array($us->getEmail(), $ps, $us->getNombre(), $us->getPerfil());
             if ($consulta->execute($params)) {
                 //Comprobar si se ha insertado realmente
@@ -244,7 +244,8 @@ class BD
                         $fila['estado'],
                         $fila['precio'],
                         new Usuarios($fila['vendedor'],$fila[12],$fila[14],$fila[15]),
-                        new Usuarios($fila['comprador'],$fila[18],$fila[20],$fila[21])
+                        ($fila['comprador']==null?null:new Usuarios($fila['comprador'],$fila[18],$fila[20],$fila[21]))
+                        
                     );
                 }
             }
@@ -377,7 +378,7 @@ class BD
             if($consulta->execute($params) && $consulta->rowCount()==1){
                 //Actualizar el nº de ventas
                 $consulta=$this->conexion->prepare('UPDATE usuarios set numVentas = numVentas+1 where id=?');
-                $params = array($l->getVendedor());
+                $params = array($l->getVendedor()->getId());
                 if($consulta->execute($params) && $consulta->rowCount()==1){
                     $this->conexion->commit();
                     $resultado=true;

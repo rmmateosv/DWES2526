@@ -1,6 +1,53 @@
 <?php
+
+use PHPMailer\PHPMailer\PHPMailer;
+
 require_once 'BD.php';
 session_start();
+function cargarConfiguracion(){
+   $resultado=array();
+   if(!file_exists('.env')){
+      throw new Exception('No existe fichero .env');
+   }
+   $f=file('.env',FILE_IGNORE_NEW_LINES);
+   foreach($f as $linea){
+      $datos=explode('=',$linea);
+      $resultado[$datos[0]]=$datos[1];
+   }
+   if(!array_key_exists('US_CORREO',$resultado) || !array_key_exists('PS_CORREO',$resultado)){
+      throw new Exception('Rellena credenciales del correo');
+   }
+   
+   return $resultado;
+}
+function enviarCorreo($para,$asunto,$texto){
+   try {
+      $correo = new PHPMailer(true);
+      //Configurar datos del servidor saliente
+      $correo->isSMTP();
+      $correo->Host='smtp.gmail.com';
+      $correo->SMTPAuth=true;
+      //Cargar datos de acceso a gmail
+      $config=cargarConfiguracion();
+      $correo->Username=$config['US_CORREO'];
+      $correo->Password=$config['PS_CORREO'];
+      $correo->SMTPSecure=PHPMailer::ENCRYPTION_SMTPS;
+      $correo->Port=465;
+      //Datos del email
+      $correo->setFrom($config['US_CORREO']);
+      $correo->addAddress($para); //Para
+      $correo->isHTML(true);
+      $correo->CharSet='UTF-8';
+      $correo->Subject=$asunto;
+      $correo->Body=$texto;
+      $correo->AltBody='El correo se visualiza en formato Web';
+      //Enviar Correo
+      $correo->send();
+   } catch (\Throwable $th) {
+      global $error;
+      $error = 'ERROR MAIL' . $th->getMessage();
+   }
+}
 
 //Crear conexión a la BD
 $bd = new BD();
@@ -103,13 +150,22 @@ if ($bd->getConexion() != null) {
       }
    } elseif (isset($_POST['bComprar'])) {
       //REcuperar datos del libro que se ha comprado
-      $libro = $bd->obtenerLibro($_POST['bComprar']);
+      $libro = $bd->obtenerLibroAmpliado($_POST['bComprar']);
       if ($libro != null && $libro->getComprador() == null) {
          //Registrar venta
          if ($bd->registrarVenta($libro)) {
             //Enviar correo a comprador
+            $asunto='Libro comprado';
+            $texto='Has comprado el libro'.$libro->getTitulo().'.';
+            $texto.='<br><img width="100px" src="https://s3.us-east-1.amazonaws.com/' . $bucket .
+            '/' . $libro->getCarpetaS3fotos() . '">';
+            enviarCorreo($_SESSION['us']->getEmail(),$asunto,$texto);
             //Enviar correo a vendedor
-
+            $asunto='Libro vendido';
+            $texto='Has vendido el libro <b>'.$libro->getTitulo().'</b>.';
+             $texto.='<br><img width="100px" src="https://s3.us-east-1.amazonaws.com/' . $bucket .
+            '/' . $libro->getCarpetaS3fotos() . '">';
+            enviarCorreo($libro->getVendedor()->getEmail(),$asunto,$texto);
             $mensaje = "Libro comprado";
          } else {
             $error = (isset($error) ? 'Excepción' . $error : 'Error al comprar el libro');
