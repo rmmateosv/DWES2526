@@ -166,7 +166,8 @@ if ($bd->getConexion() != null) {
              $texto.='<br><img width="100px" src="https://s3.us-east-1.amazonaws.com/' . $bucket .
             '/' . $libro->getCarpetaS3fotos() . '">';
             enviarCorreo($libro->getVendedor()->getEmail(),$asunto,$texto);
-            $mensaje = "Libro comprado";
+            //echo '<script>alert("Libro comprado")</script>';
+            header('location:misCompras.php');
          } else {
             $error = (isset($error) ? 'Excepción' . $error : 'Error al comprar el libro');
          }

@@ -27,6 +27,9 @@ if (!isset($_SESSION['us'])) {
                 <a class="nav-link active" href="misAnuncios.php">Mis anuncios</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link active" href="misCompras.php">Mis compras</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link active" href="buzon.php">Buzón</a>
             </li>
             <?php 

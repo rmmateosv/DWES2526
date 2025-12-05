@@ -259,6 +259,43 @@ class BD
 
         return $resultado;
     }
+    public function obtenerLibrosComprados($id)
+    {
+        $resultado = null;
+        try {
+            $consulta = $this->conexion->prepare('SELECT * from libros l
+                                                        join usuarios u on vendedor = u.id
+                                                        left join usuarios u2 on comprador = u2.id
+                                                        where u2.id = ?');
+            $params = array($id);
+            if ($consulta->execute($params)) {
+                if ($fila = $consulta->fetch()) {
+                    $resultado = new Libros(
+                        $fila[0], //Id de posición 0
+                        $fila['fechaC'],
+                        $fila['isbn'],
+                        $fila['titulo'],
+                        $fila['autor'],
+                        $fila['descripcion'],
+                        $fila['carpetaS3Fotos'],
+                        $fila['estado'],
+                        $fila['precio'],
+                        new Usuarios($fila['vendedor'],$fila[12],$fila[14],$fila[15]),
+                        ($fila['comprador']==null?null:new Usuarios($fila['comprador'],$fila[18],$fila[20],$fila[21]))
+                        
+                    );
+                }
+            }
+        } catch (PDOException $e) {
+            global $error;
+            $error = 'ERROR BD' . $e->getMessage();
+        } catch (\Throwable $th) {
+            global $error;
+            $error = 'ERROR GENÉRCO' . $th->getMessage();
+        }
+
+        return $resultado;
+    }
     public function borrarLibro($id)
     {
         $resultado = false;
