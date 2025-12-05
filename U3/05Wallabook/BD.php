@@ -261,7 +261,7 @@ class BD
     }
     public function obtenerLibrosComprados($id)
     {
-        $resultado = null;
+        $resultado = array();
         try {
             $consulta = $this->conexion->prepare('SELECT * from libros l
                                                         join usuarios u on vendedor = u.id
@@ -269,8 +269,8 @@ class BD
                                                         where u2.id = ?');
             $params = array($id);
             if ($consulta->execute($params)) {
-                if ($fila = $consulta->fetch()) {
-                    $resultado = new Libros(
+                while ($fila = $consulta->fetch()) {
+                    $resultado[] = new Libros(
                         $fila[0], //Id de posición 0
                         $fila['fechaC'],
                         $fila['isbn'],

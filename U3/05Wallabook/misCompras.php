@@ -4,6 +4,7 @@ require_once 'cabecera.php';
 ?>
 <div class="container">
     <h4>Mis Compras</h4>
+    <div style="display: flex; flex-direction:row">
     <?php
     $libros = $bd->obtenerLibrosComprados($_SESSION['us']->getId());
     foreach($libros as $l){
@@ -17,6 +18,7 @@ require_once 'cabecera.php';
             echo '</div>';
     }
     ?>
+    </div>
 </div>
 <?php
 require_once 'pie.php';
