@@ -1,10 +1,10 @@
 <?php
     class Libros{
         private $id,$fechaC,$isbn,$titulo,$autor,$descripcion,$carpetaS3fotos,
-        $estado,$precio,$vendedor,$comprador;
+        $estado,$precio,$vendedor,$comprador,$valoracion;
 
         public function __construct($id,$fechaC,$isbn,$titulo,$autor,$descripcion,$carpetaS3fotos,
-        $estado,$precio,$vendedor,$comprador)
+        $estado,$precio,$vendedor,$comprador,$valoracion)
         {
             $this->id=$id;
             $this->fechaC=$fechaC;
@@ -17,6 +17,7 @@
             $this->precio=$precio;
             $this->vendedor=$vendedor;
             $this->comprador=$comprador;
+            $this->valoracion=$valoracion;
         }
 
         /**
@@ -235,6 +236,26 @@
         public function setComprador($comprador)
         {
                 $this->comprador = $comprador;
+
+                return $this;
+        }
+
+        /**
+         * Get the value of valoracion
+         */ 
+        public function getValoracion()
+        {
+                return $this->valoracion;
+        }
+
+        /**
+         * Set the value of valoracion
+         *
+         * @return  self
+         */ 
+        public function setValoracion($valoracion)
+        {
+                $this->valoracion = $valoracion;
 
                 return $this;
         }

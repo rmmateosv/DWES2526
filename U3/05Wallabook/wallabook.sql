@@ -38,4 +38,5 @@ create table mensajes(
 );
 
 alter table usuarios add (numVentas int not null default 0);
+alter table libros add (valoracionCompra int default null);
 

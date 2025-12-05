@@ -81,7 +81,7 @@ if ($bd->getConexion() != null) {
             $error = 'Error, email ya está registrado';
          } else {
             //Si llego aquí, $u es null
-            $u = new Usuarios(null, $_POST['email'], $_POST['nombre'], 'U');
+            $u = new Usuarios(null, $_POST['email'], $_POST['nombre'], 'U',null);
             if ($bd->crearUsuario($u, $_POST['ps'])) {
                $mensaje = 'Usuario creado con ID:' . $u->getId();
             } else {
@@ -112,7 +112,7 @@ if ($bd->getConexion() != null) {
             'Disponible',
             $_POST['precio'],
             $_SESSION['us']->getId(),
-            null
+            null,null
          );
          if ($bd->crearLibro($libro)) {
             $mensaje = 'Libro Creado con id:' . $libro->getId();
@@ -140,7 +140,7 @@ if ($bd->getConexion() != null) {
       ) {
          $error = 'Todos los campos son obligatorios';
       } else {
-         $l = new Libros($_POST['guardarL'], null, $_POST['isbn'], $_POST['titulo'], $_POST['autor'], $_POST['descripcion'], $_FILES['foto'], $_POST['estado'], $_POST['precio'], null, null);
+         $l = new Libros($_POST['guardarL'], null, $_POST['isbn'], $_POST['titulo'], $_POST['autor'], $_POST['descripcion'], $_FILES['foto'], $_POST['estado'], $_POST['precio'], null, null,null);
          //Modificar el libro
          if ($bd->modificarLibro($l)) {
             $mensaje = "Libro modificado";

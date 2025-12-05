@@ -1,13 +1,14 @@
 <?php
     class Usuarios{
-        private $id,$email,$nombre,$perfil;
+        private $id,$email,$nombre,$perfil, $numVentas;
 
-        public function __construct($id,$email,$nombre, $perfil)
+        public function __construct($id,$email,$nombre, $perfil, $numVentas)
         {
             $this->id=$id;
             $this->email=$email;
             $this->nombre=$nombre;
             $this->perfil=$perfil;
+            $this->perfil=$numVentas;
         }
 
         /**
@@ -86,6 +87,26 @@
         public function setPerfil($perfil)
         {
                 $this->perfil = $perfil;
+
+                return $this;
+        }
+
+        /**
+         * Get the value of numVentas
+         */ 
+        public function getNumVentas()
+        {
+                return $this->numVentas;
+        }
+
+        /**
+         * Set the value of numVentas
+         *
+         * @return  self
+         */ 
+        public function setNumVentas($numVentas)
+        {
+                $this->numVentas = $numVentas;
 
                 return $this;
         }

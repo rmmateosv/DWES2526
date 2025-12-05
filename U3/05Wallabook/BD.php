@@ -46,7 +46,7 @@ class BD
                 //Comprobar si el select ha encontrado el usuario por email y ps
                 if ($fila = $consulta->fetch()) {
                     //Los datos son correctos, se encuentra un usuario
-                    $resultado = new Usuarios($fila['id'], $fila['email'], $fila['nombre'], $fila['perfil']);
+                    $resultado = new Usuarios($fila['id'], $fila['email'], $fila['nombre'], $fila['perfil'],$fila['numVentas']);
                 }
             }
         } catch (PDOException $e) {
@@ -96,7 +96,8 @@ class BD
                         $fila['id'],
                         $fila['email'],
                         $fila['nombre'],
-                        $fila['perfil']
+                        $fila['perfil'],
+                        $fila['numVentas']
                     );
                 }
             }
@@ -176,7 +177,8 @@ class BD
                         $fila['estado'],
                         $fila['precio'],
                         $fila['vendedor'],
-                        $fila['comprador']
+                        $fila['comprador'],
+                        $fila['valoracion']
                     );
                 }
             }
@@ -208,7 +210,8 @@ class BD
                         $fila['estado'],
                         $fila['precio'],
                         $fila['vendedor'],
-                        $fila['comprador']
+                        $fila['comprador'],
+                        $fila['valoracion']
                     );
                 }
             }
@@ -243,9 +246,9 @@ class BD
                         $fila['carpetaS3Fotos'],
                         $fila['estado'],
                         $fila['precio'],
-                        new Usuarios($fila['vendedor'],$fila[12],$fila[14],$fila[15]),
-                        ($fila['comprador']==null?null:new Usuarios($fila['comprador'],$fila[18],$fila[20],$fila[21]))
-                        
+                        new Usuarios($fila['vendedor'],$fila[12],$fila[14],$fila[15], $fila['numVentas']),
+                        ($fila['comprador']==null?null:new Usuarios($fila['comprador'],$fila[18],$fila[20],$fila[21],$fila['numVentas'])),
+                        $fila['valoracion']
                     );
                 }
             }
@@ -280,8 +283,9 @@ class BD
                         $fila['carpetaS3Fotos'],
                         $fila['estado'],
                         $fila['precio'],
-                        new Usuarios($fila['vendedor'],$fila[12],$fila[14],$fila[15]),
-                        ($fila['comprador']==null?null:new Usuarios($fila['comprador'],$fila[18],$fila[20],$fila[21]))
+                        new Usuarios($fila['vendedor'],$fila[12],$fila[14],$fila[15],$fila['numVentas']),
+                        ($fila['comprador']==null?null:new Usuarios($fila['comprador'],$fila[18],$fila[20],$fila[21],$fila['numVentas'])),
+                        $fila['valoracion']
                         
                     );
                 }
@@ -386,7 +390,8 @@ class BD
                         $fila['estado'],
                         $fila['precio'],
                         $fila['vendedor'],
-                        $fila['comprador']
+                        $fila['comprador'],
+                        $fila['valoracion']
                     ); 
                 }
             }
