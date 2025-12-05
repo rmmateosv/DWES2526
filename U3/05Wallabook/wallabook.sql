@@ -38,5 +38,20 @@ create table mensajes(
 );
 
 alter table usuarios add (numVentas int not null default 0);
-alter table libros add (valoracionCompra int default null);
+alter table libros add (valoracion int default null);
+
+delimiter //
+create function obtenerMediaValoracion(pVendedor int)
+	returns float deterministic
+begin
+	declare media float;
+	 select avg(valoracion)
+		into media
+		from libros
+        where vendedor = pVendedor;
+	return ifnull(media,0);
+end//
+delimiter ;
+
+select obtenerMediaValoracion(3);
 

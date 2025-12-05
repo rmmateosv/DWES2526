@@ -118,7 +118,7 @@ class BD
             //Crear el libro
             $rutaS3 = $libro->getVendedor() . '/' . $libro->getFechaC() . $libro->getCarpetaS3fotos()['name'];
             $consulta = $this->conexion->prepare('INSERT into libros values 
-            (default,?,?,?,?,?,?,?,?,?,null)');
+            (default,?,?,?,?,?,?,?,?,?,null,null)');
             $params = array(
                 $libro->getFechaC(),
                 $libro->getIsbn(),
@@ -246,8 +246,8 @@ class BD
                         $fila['carpetaS3Fotos'],
                         $fila['estado'],
                         $fila['precio'],
-                        new Usuarios($fila['vendedor'],$fila[12],$fila[14],$fila[15], $fila['numVentas']),
-                        ($fila['comprador']==null?null:new Usuarios($fila['comprador'],$fila[18],$fila[20],$fila[21],$fila['numVentas'])),
+                        new Usuarios($fila['vendedor'],$fila[13],$fila[15],$fila[16],$fila['numVentas']),
+                        ($fila['comprador']==null?null:new Usuarios($fila['comprador'],$fila[20],$fila[22],$fila[23],$fila['numVentas'])),
                         $fila['valoracion']
                     );
                 }
@@ -283,8 +283,8 @@ class BD
                         $fila['carpetaS3Fotos'],
                         $fila['estado'],
                         $fila['precio'],
-                        new Usuarios($fila['vendedor'],$fila[12],$fila[14],$fila[15],$fila['numVentas']),
-                        ($fila['comprador']==null?null:new Usuarios($fila['comprador'],$fila[18],$fila[20],$fila[21],$fila['numVentas'])),
+                        new Usuarios($fila['vendedor'],$fila[13],$fila[15],$fila[16],$fila['numVentas']),
+                        ($fila['comprador']==null?null:new Usuarios($fila['comprador'],$fila[20],$fila[22],$fila[23],$fila['numVentas'])),
                         $fila['valoracion']
                         
                     );
@@ -429,6 +429,43 @@ class BD
                 }
             }
         }  catch (PDOException $e) {
+            global $error;
+            $error = 'ERROR BD' . $e->getMessage();
+        } catch (\Throwable $th) {
+            global $error;
+            $error = 'ERROR GENÉRCO' . $th->getMessage();
+        }
+        return $resultado;
+    }
+    public function valorar(Libros $l,$num){
+        $resultado = false;
+        try {
+            $consulta = $this->conexion->prepare('UPDATE libros set valoracion = ? 
+            where id = ?');
+            $params=array($num,$l->getId());
+            if($consulta->execute($params) && $consulta->rowCount()==1){
+                $resultado=true;
+            }
+        } catch (PDOException $e) {
+            global $error;
+            $error = 'ERROR BD' . $e->getMessage();
+        } catch (\Throwable $th) {
+            global $error;
+            $error = 'ERROR GENÉRCO' . $th->getMessage();
+        }
+        return $resultado;
+    }
+    public function obtenerValoracionMedia($vendedor){
+        $resultado = 0;
+        try {
+            $consulta = $this->conexion->prepare('SELECT obtenerMediaValoracion(?) as m');
+            $params=array($vendedor);
+            if($consulta->execute($params)){
+                if($fila=$consulta->fetch()){
+                    $resultado=$fila['m'];
+                }
+            }
+        } catch (PDOException $e) {
             global $error;
             $error = 'ERROR BD' . $e->getMessage();
         } catch (\Throwable $th) {

@@ -174,5 +174,15 @@ if ($bd->getConexion() != null) {
       } else {
          $error = (isset($error) ? 'Excepción' . $error : 'El libro no está dsiponible');
       }
+   } elseif (isset($_POST['bVal'])) {
+      $l=$bd->obtenerLibro($_POST['bVal']);
+      if($l==null || $l->getValoracion()!=null || empty($_POST['valoracion'])){
+         $error = (isset($error) ? 'Excepción' . $error : 'El libro no se no puede valorar');
+      }else{
+         if($bd->valorar($l,$_POST['valoracion'])){
+            $mensaje='Valoración realizada';
+         }
+      }
+
    }
 }
