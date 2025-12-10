@@ -32,9 +32,9 @@ if (!isset($_SESSION['us'])) {
             <li class="nav-item">
                 <a class="nav-link active" href="buzon.php">Buzón</a>
             </li>
-            <?php 
-            if($_SESSION['us']->getPerfil()=='A'){
-            echo '<li class="nav-item">
+            <?php
+            if ($_SESSION['us']->getPerfil() == 'A') {
+                echo '<li class="nav-item">
                 <a class="nav-link active" href="gestionUS.php">Usuarios</a>
             </li>';
             }
@@ -45,7 +45,21 @@ if (!isset($_SESSION['us'])) {
                 </form>
             </li>
             <li class="nav-item">
-                <h4 style="margin-left: 20px;"><?php echo $_SESSION['us']->getNombre();?></h4>
+                <h4 style="margin-left: 20px;"><?php echo $_SESSION['us']->getNombre();
+                                                ?>
+                </h4>
+            </li>
+            <li class="nav-item">
+                <?php
+                if ($_SESSION['us']->getPerfil() == 'U') {
+                    $estadistica = $bd->obtenerEstadistica($_SESSION['us']->getId());
+                    if (!empty($estadistica)) {
+                        echo 'Libros en Venta:' . $estadistica['numLibrosVenta'];
+                        echo '-Libros Vendidos:' . $estadistica['numLibrosVendidos'];
+                        echo '-Saldo Obtenido:' . $estadistica['saldoTotal'];
+                    }
+                }
+                ?>
             </li>
         </ul>
     </div>

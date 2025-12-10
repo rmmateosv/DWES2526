@@ -474,6 +474,27 @@ class BD
         }
         return $resultado;
     }
+    public function obtenerEstadistica($idUsuario){
+        $resultado=array();
+        try {
+            $consulta = $this->conexion->prepare('CALL  estadistica(?)');
+            $params=array($idUsuario);
+            if($consulta->execute($params)){
+                if($fila=$consulta->fetch()){
+                    $resultado['numLibrosVenta']=$fila['numLibrosVenta'];
+                    $resultado['numLibrosVendidos']=$fila['numVentas'];
+                    $resultado['saldoTotal']=$fila['saldo'];
+                }
+            }
+        } catch (PDOException $e) {
+            global $error;
+            $error = 'ERROR BD' . $e->getMessage();
+        } catch (\Throwable $th) {
+            global $error;
+            $error = 'ERROR GENÉRCO' . $th->getMessage();
+        }
+        return $resultado;
+    }
     /**
      * Get the value of conexion
      */

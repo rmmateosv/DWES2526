@@ -12,7 +12,7 @@ require_once 'cabecera.php';
             header('location:index.php');
         }
         echo '<h3>Detalle Libro: ' . $libro->getTitulo() . '</h3>';
-        echo '<h3>Vendedor: ' . $libro->getVendedor()->getNombre() .
+        echo '<h3>Vendedor: ' . $libro->getVendedor()->getNombre() .' - Valoración:'.
         $bd->obtenerValoracionMedia($libro->getVendedor()->getId()). '</h3>';
         echo '<div style="display: flex; flex-direction:column; align-items:center;">';
         echo '<img width="100px" src="https://s3.us-east-1.amazonaws.com/' . $bucket .

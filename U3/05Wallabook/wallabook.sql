@@ -51,7 +51,31 @@ begin
         where vendedor = pVendedor;
 	return ifnull(media,0);
 end//
+
+create procedure estadistica(pUsuario int)
+begin
+	declare numLibrosVenta int default 0;
+    declare numVentas int default 0;
+    declare saldo float default 0;
+    
+    select count(*)
+		into numLibrosVenta
+		from libros
+        where vendedor = pUsuario and comprador is null;
+	
+    select count(*), ifnull(sum(precio),0)
+		into numVentas, saldo
+		from libros
+        where vendedor = pUsuario and comprador is not null;
+	
+    -- Devolver datos
+    select numLibrosVenta, numVentas, saldo;
+end//
+
+
 delimiter ;
 
-select obtenerMediaValoracion(3);
+select obtenerMediaValoracion(1) as n;
+call estadistica(4);
+
 

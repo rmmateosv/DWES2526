@@ -8,7 +8,7 @@
             $this->email=$email;
             $this->nombre=$nombre;
             $this->perfil=$perfil;
-            $this->perfil=$numVentas;
+            $this->numVentas=$numVentas;
         }
 
         /**
