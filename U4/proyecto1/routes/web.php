@@ -1,24 +1,35 @@
 <?php
 
+use App\Http\Controllers\AlumnoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     //return view('welcome');
     return 'Hola Mundo';
 });
-
+/* ***FORMA INCIAL - MÁS FÁCIL DE ENTENDER ***
 //Rutas para hacer un CRUD de Alumnos
 //Ruta para consultar todos los alumnos
-Route::get('/alumnos',function(){
-    return '<h4>Mostrar todos los alumnos</h4>';
-});
+Route::get('/alumnos',[AlumnoController::class,'obtenerAlumnos'])->name('alumnos');
 //Ruta para consultar un único alumno
-Route::get('/alumnos/{idAlumno}',function($id){
-    return view('alumno',compact('id'));
-});
+Route::get('/alumnos/{idAlumno}',[AlumnoController::class,'verAlumno'])->name('alumno');
 //Ruta para insertar un alumno
-Route::post('/alumnos',function(){
-    return '<h4>Insertar alumno </h4>';
-})->name('insertar');
+Route::post('/alumnos',[AlumnoController::class,'insertarAlumno'])->name('insertar');
 //Ruta para modificar un alumno
+Route::put('/alumnos',[AlumnoController::class,'modificarAlumno'])->name('modificar');
 //Ruta para borrar un alumno
+Route::delete('/alumnos',[AlumnoController::class,'borrarAlumno'])->name('borrar');
+**********       */
+Route::controller(AlumnoController::class)->group(function(){
+    //Rutas para hacer un CRUD de Alumnos
+    //Ruta para consultar todos los alumnos
+    Route::get('/alumnos','obtenerAlumnos')->name('alumnos');
+    //Ruta para consultar un único alumno
+    Route::get('/alumnos/{idAlumno}','verAlumno')->name('alumno');
+    //Ruta para insertar un alumno
+    Route::post('/alumnos','insertarAlumno')->name('insertar');
+    //Ruta para modificar un alumno
+    Route::put('/alumnos','modificarAlumno')->name('modificar');
+    //Ruta para borrar un alumno
+    Route::delete('/alumnos','borrarAlumno')->name('borrar');
+});
