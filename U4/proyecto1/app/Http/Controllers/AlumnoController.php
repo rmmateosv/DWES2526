@@ -11,12 +11,18 @@ class AlumnoController extends Controller
 {
     //Método para obtener alumnos
     public function obtenerAlumnos(){
-        return view('vistaAlumnos');
+        //REcuperar alumnos de la BD
+        $alumnos = Alumno::all();
+        //Cargar la vista con alumnos
+        return view('vistaAlumnos',compact('alumnos'));
     }
 
     // Ver/Editar alumno
     public function verAlumno($id){
-        return '<h1>Mostrar y editar datos de un alumno:'.$id.'</h1>';
+       //Recuprar los datos del alumno cuyo id se pasa en la ruta
+       $alumno = Alumno::findById($id) ;
+       //Cargar vista para modificar el almno
+       return view('modificarAlumno',compact('alumno'));
     }
     // Insertar alumno
     public function insertarAlumno(Request $request){
