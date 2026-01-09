@@ -36,9 +36,15 @@
                     <td>
                         <a href="alumnos/{{$a->id}}">Modificar</a>
                         <form action="{{route('alumno',$a->id)}}" method="get">
+                            @csrf
                             <button type="submit" name="modificarAlumno">Modificar</button>
                         </form>
-                        <button type="submit" name="borrarAlumno">Borrar Alumno</button>
+                        <form action="{{route('borrar')}}" method="post">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" name="borrarAlumno" value="{{$a->id}}">Borrar Alumno</button>
+                        </form>
+                        
                     </td>
                 </tr>
             @endforeach
