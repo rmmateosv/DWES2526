@@ -20,7 +20,7 @@ class AlumnoController extends Controller
     // Ver/Editar alumno
     public function verAlumno($id){
        //Recuprar los datos del alumno cuyo id se pasa en la ruta
-       $alumno = Alumno::findById($id) ;
+       $alumno = Alumno::find($id) ;
        //Cargar vista para modificar el almno
        return view('modificarAlumno',compact('alumno'));
     }

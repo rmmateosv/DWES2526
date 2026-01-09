@@ -29,7 +29,7 @@ Route::controller(AlumnoController::class)->group(function(){
     //Ruta para insertar un alumno
     Route::post('/alumnos','insertarAlumno')->name('insertar');
     //Ruta para modificar un alumno
-    Route::put('/alumnos','modificarAlumno')->name('modificar');
+    Route::put('/alumnos/{idAlumno}','modificarAlumno')->name('modificar');
     //Ruta para borrar un alumno
     Route::delete('/alumnos','borrarAlumno')->name('borrar');
 });
