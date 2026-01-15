@@ -14,7 +14,15 @@ return new class extends Migration
         Schema::create('detalles', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('pedido_id'); //Pedido FK
+            $table->foreignId('pedido_id')->
+                constrained()->
+                onUpdate('cascade')->
+                onDelete('restrict'); //Pedido FK
+            $table->foreignId('producto_id')->constrained()->
+                onUpdate('cascade')->
+                onDelete('restrict');//Producto FK
+            $table->integer('cantidad')->nullable(false)->default(1);
+            $table->float('precio')->nullable(false);
         });
     }
 
