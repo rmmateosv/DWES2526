@@ -9,7 +9,7 @@
 <body>
     <h2>Nombre del Empleado</h2>
     <div style="display: flex; flex-direction: row">
-        <div>
+        <div style="border:1px solid red;margin:20px;">
             <h2>Selecciona producto</h2>
             <table>
                 <tr>
@@ -30,10 +30,14 @@
             </table>
         </div>
 
-        <div>
-
+        <div style="border:1px solid red;margin:20px">
+            <form action="{{route('crearPedido')}}" method="post">
+                @csrf
+                <button>Nuevo Pedido</button>
+            </form>
         </div>
     </div>
+    
     
 </body>
 </html>
