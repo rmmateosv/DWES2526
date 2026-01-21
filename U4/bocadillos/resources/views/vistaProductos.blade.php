@@ -1,43 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <h2>Nombre del Empleado</h2>
-    <div style="display: flex; flex-direction: row">
-        <div style="border:1px solid red;margin:20px;">
-            <h2>Selecciona producto</h2>
-            <table>
-                <tr>
-                    <td>Nombre</td>
-                    <td>Foto</td>
-                    <td>Acción</td>
-                </tr>
-                @foreach ($productos as $p)
-                    <tr>
-                        <td>{{$p->nombre}}</td>
-                        <td><img src="{{ ($p->foto==null?asset('img/generica.png'):asset($p->foto)) }}" alt="producto"></td>
-                        <td>
-                            <button type="submit" name="anadir" value="{{$p->id}}">+</button>
-                            <button type="submit" name="eliminar" value="{{$p->id}}">-</button>
-                        </td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
+@extends('plantilla')
 
-        <div style="border:1px solid red;margin:20px">
-            <form action="{{route('crearPedido')}}" method="post">
-                @csrf
-                <button>Nuevo Pedido</button>
-            </form>
-        </div>
+
+@section('titulo')
+    <h3>Venta de bocadillos</h3>
+@endsection
+
+@section('contenido')
+<div style="display: flex; flex-direction: row">
+    <div style="border:1px solid red;margin:20px;">
+        <h2>Selecciona producto</h2>
+        <table>
+            <tr>
+                <td>Nombre</td>
+                <td>Foto</td>
+                <td>Acción</td>
+            </tr>
+            @foreach ($productos as $p)
+                <tr>
+                    <td>{{$p->nombre}}</td>
+                    <td><img src="{{ ($p->foto==null?asset('img/generica.png'):asset($p->foto)) }}" alt="producto"></td>
+                    <td>
+                        <form action="{{route('insertarD')}}" method="post">
+                            @csrf
+                            <button type="submit" name="anadir" value="{{$p->id}}">+</button>
+                        </form>
+                        
+                        <button type="submit" name="eliminar" value="{{$p->id}}">-</button>
+                    </td>
+                </tr>
+            @endforeach
+        </table>
     </div>
-    
-    
-</body>
-</html>
+
+    <div style="border:1px solid red;margin:20px">
+        <form action="{{route('crearPedido')}}" method="post">
+            @csrf
+            @if (session('pedido'))
+                <h3>Pedido:{{session('pedido')->id}}</h3>
+            @else
+                <button>Nuevo Pedido</button>
+            @endif
+            
+        </form>
+    </div>
+</div>
+
+@endsection

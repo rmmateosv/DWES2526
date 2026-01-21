@@ -14,4 +14,5 @@ Route::controller(ProductoController::class)->group(function(){
 
 Route::controller(PedidoController::class)->group(function(){
     Route::post('/pedido','crearPedido')->name('crearPedido');
+    Route::post('/insertarD','insertarDetalle')->name('insertarD');
 });
