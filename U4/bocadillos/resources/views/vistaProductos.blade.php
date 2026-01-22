@@ -20,12 +20,16 @@
                     <td>{{$p->nombre}}</td>
                     <td><img src="{{ ($p->foto==null?asset('img/generica.png'):asset($p->foto)) }}" alt="producto"></td>
                     <td>
+                        @if (session('pedido'))                            
                         <form action="{{route('insertarD')}}" method="post">
                             @csrf
                             <button type="submit" name="anadir" value="{{$p->id}}">+</button>
                         </form>
-                        
-                        <button type="submit" name="eliminar" value="{{$p->id}}">-</button>
+                        <form action="{{route('eliminarD')}}" method="post">
+                            @csrf
+                            <button type="submit" name="eliminar" value="{{$p->id}}">-</button>
+                        </form>
+                        @endif
                     </td>
                 </tr>
             @endforeach
@@ -37,6 +41,23 @@
             @csrf
             @if (session('pedido'))
                 <h3>Pedido:{{session('pedido')->id}}</h3>
+                <table border="1">
+                    <tr>
+                        <td>Producto</td>
+                        <td>Cantidad</td>
+                        <td>Precio</td>
+                    </tr>
+                @foreach (session('pedido')->detalles() as $d)
+                    <tr>
+                        <td>{{$d->producto->nombre}}</td>
+                        <td><img src="{{ ($d->producto->foto==null?asset('img/generica.png'):asset($d->producto->foto)) }}" alt="producto"></td>
+                        <td>{{$d->cantidad}}</td>
+                        <td>{{$d->precio}}</td>
+                        <td>{{($d->cantidad*$d->precio)}}</td>
+                    </tr>
+                @endforeach
+                </table>
+
             @else
                 <button>Nuevo Pedido</button>
             @endif
