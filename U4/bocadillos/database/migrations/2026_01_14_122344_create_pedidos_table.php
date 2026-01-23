@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->boolean('cancelado')->nullable(false)->default(false);
+            $table->boolean('fin')->nullable(false)->default(false);
         });
     }
 

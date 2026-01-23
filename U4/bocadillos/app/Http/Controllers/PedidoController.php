@@ -34,7 +34,7 @@ class PedidoController extends Controller
         ]);
 
         try {
-            if(session('pedido')==null){
+            if (session('pedido') == null) {
                 throw new Exception('Crea pedido');
             }
             //Comprobar si ya hay un detalle para el producto
@@ -54,7 +54,7 @@ class PedidoController extends Controller
             }
             //Insert/update
             $d->save();
-            session(['pedido'=>$d->pedido]);
+            session(['pedido' => $d->pedido]);
             return back()->with('mensaje', 'Añadido....');
         } catch (\Throwable $th) {
             return back()->with('mensaje', 'Error' . $th->getMessage());
@@ -68,7 +68,7 @@ class PedidoController extends Controller
         ]);
 
         try {
-            if(session('pedido')==null){
+            if (session('pedido') == null) {
                 throw new Exception('Crea pedido');
             }
             //Comprobar si ya hay un detalle para el producto
@@ -78,19 +78,44 @@ class PedidoController extends Controller
                 ->where('producto_id', $r->eliminar)
                 ->first();
             if ($d != null) {
-               if($d->cantidad==1){
-                //Borrar
-                $d->delete();
-               }else{
-                //Decrementar cantidad
-                $d->cantidad-=1;
-                $d->save();
-               }
-               session(['pedido'=>$d->pedido]);
+                if ($d->cantidad == 1) {
+                    //Borrar
+                    $d->delete();
+                } else {
+                    //Decrementar cantidad
+                    $d->cantidad -= 1;
+                    $d->save();
+                }
+                session(['pedido' => $d->pedido]);
             }
             return back()->with('mensaje', 'Borrado....');
         } catch (\Throwable $th) {
             return back()->with('mensaje', 'Error' . $th->getMessage());
+        }
+    }
+    public function modificar(Request $r, $id)
+    {
+       $r->validate([
+            'cancelar' => 'sometimes|required|cancelar',
+            'fin' => 'sometimes|required|fin'
+
+        ]);
+        try {
+            $p = Pedido::find($id);
+            if ($p == null) {
+                throw new Exception('No existe el pedido');
+            } else {
+                if ($r->has('cancelar')) {
+                    $p->cancelado = true;
+                } elseif ($r->has('fin')) {
+                    $p->fin = true;
+                }
+                $p->save();
+                session()->forget('pedido');
+                return back()->with('mensaje', 'Pedido finalizado/cancelado');
+            }
+        } catch (\Throwable $th) {
+            return back()->with('mensaje', 'Error al cancelar/finalizar' . $th->getMessage());
         }
     }
 }

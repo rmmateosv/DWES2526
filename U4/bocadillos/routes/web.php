@@ -16,4 +16,5 @@ Route::controller(PedidoController::class)->group(function(){
     Route::post('/pedido','crearPedido')->name('crearPedido');
     Route::post('/insertarD','insertarDetalle')->name('insertarD');
     Route::post('/eliminarD','eliminarDetalle')->name('eliminarD');
+    Route::put('/modificar/{id}','modificar')->name('modificar');
 });
