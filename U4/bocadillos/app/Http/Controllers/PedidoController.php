@@ -96,8 +96,8 @@ class PedidoController extends Controller
     public function modificar(Request $r, $id)
     {
        $r->validate([
-            'cancelar' => 'sometimes|required|cancelar',
-            'fin' => 'sometimes|required|fin'
+            'cancelar' => 'sometimes',
+            'fin' => 'sometimes'
 
         ]);
         try {
