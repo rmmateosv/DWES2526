@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->boolean('cancelado')->nullable(false)->default(false);
             $table->boolean('fin')->nullable(false)->default(false);
+            $table->foreignId('user_id')->constrained()->onUpdate('cascade')->onDelete('restrict');
         });
     }
 

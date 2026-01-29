@@ -22,7 +22,7 @@ class PedidoController extends Controller
             session(['pedido' => $p]);
             return back()->with('mensaje', 'Pedido creado:' . $p->id . '. Puedes añadir bocadillos al pedido');
         } catch (\Throwable $th) {
-            return back()->with('mensaje', 'Error' . $th->getMessage());
+            return back()->with('mensaje', 'Error:' . $th->getMessage());
         }
     }
 
