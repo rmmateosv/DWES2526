@@ -18,6 +18,7 @@
             <button type="submit">Login</button>
             <a href="{{route('registro')}}">Registrarse</a>
         </form>
+    
          <div class="row">
             <div class="col">
                 @if (session('mensaje'))

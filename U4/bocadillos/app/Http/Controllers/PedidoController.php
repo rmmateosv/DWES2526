@@ -8,15 +8,29 @@ use App\Models\Producto;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class PedidoController extends Controller
 {
+     function __construct(){
+        //Usamos el middelware de autenticación para evitar
+        //el acceo a cualquier ruta de este controlador
+        $this->middleware('auth');
+    }
+
+    function verProductos(){
+        //Recuperar productos 
+        $productos = Producto::all();
+        return view('vistaProductos',compact('productos'));
+    }
+
     //Crear pedido
     public function crearPedido(Request $r)
     {
         try {
             $p = new Pedido();
             $p->cancelado = false;
+            $p->user_id=Auth::user()->id;
             $p->save();
             //Guardamos el pedido en la sesión
             session(['pedido' => $p]);
@@ -117,5 +131,8 @@ class PedidoController extends Controller
         } catch (\Throwable $th) {
             return back()->with('mensaje', 'Error al cancelar/finalizar' . $th->getMessage());
         }
+    }
+    function verPedidos(){
+        return 'Pedidos de'. Auth::user()->name;
     }
 }

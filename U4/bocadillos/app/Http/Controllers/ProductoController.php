@@ -8,9 +8,12 @@ use Illuminate\Routing\Controller;
 
 class ProductoController extends Controller
 {
+    function __construct(){
+        //Usamos el middelware de autenticación para evitar
+        //el acceo a cualquier ruta de este controlador
+        $this->middleware('auth');
+    }
     function verProductos(){
-        //Recuperar productos 
-        $productos = Producto::all();
-        return view('vistaProductos',compact('productos'));
+        return 'Página CRUD de productos';
     }
 }

@@ -14,20 +14,22 @@
             <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                <a class="navbar-brand"  href="">Ventas</a>
+                <a class="navbar-brand"  href="{{route('inicio')}}">Ventas</a>
                 </li>
                 <li class="nav-item">
-                <a class="navbar-brand"  href="">Pedidos</a>
+                <a class="navbar-brand"  href="{{route('pedidos')}}">Pedidos</a>
                 </li>
                 <li class="nav-item">
-                <a class="navbar-brand"  href="">Productos</a>
+                <a class="navbar-brand"  href="{{route('productos')}}">Productos</a>
                 </li>
             </ul>
-            <span class="navbar-text">Nombre del Empleado</span>
+            <span class="navbar-text">
+                @auth
+                    {{Auth::user()->name}}
+                @endauth
+            </span>
             <nav class="navbar bg-body-tertiary">
-                <form class="container-fluid justify-content-start">
-                    <button class="btn btn-sm btn-outline-secondary" type="button">Salir</button>
-                </form>
+                <a  class="btn btn-sm btn-outline-secondary" href="{{route('cerrar')}}">Salir</a>                
             </nav>
             </div>
         </div>
