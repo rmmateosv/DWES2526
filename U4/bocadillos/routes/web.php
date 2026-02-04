@@ -20,6 +20,7 @@ Route::controller(PedidoController::class)->group(function(){
     Route::post('/eliminarD','eliminarDetalle')->name('eliminarD');
     Route::put('/modificar/{id}','modificar')->name('modificar');
     Route::get('/pedidos','verPedidos')->name('pedidos');
+    Route::get('/detalle/{idPedido}','verDetalle')->name('detalle');
 });
 
 Route::controller(LoginController::class)->group(function(){

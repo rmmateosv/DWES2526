@@ -132,7 +132,22 @@ class PedidoController extends Controller
             return back()->with('mensaje', 'Error al cancelar/finalizar' . $th->getMessage());
         }
     }
-    function verPedidos(){
-        return 'Pedidos de'. Auth::user()->name;
+    public function verPedidos(){
+        //Obtener los pedidos
+        $pedidos = Pedido::orderBy('created_at','desc')->get();
+    
+        return view('vistaPedidos',compact('pedidos'));
+    }
+
+    public function verDetalle($idPedido){
+        //REcuperar el pedido
+        $p = Pedido::find($idPedido);
+        if($p!=null){
+            return back()->with('pedidoSeleccionado',$p);
+        }
+        else{
+            return back()->with('mensaje','No se ha encontrado pedido');
+        }
+
     }
 }

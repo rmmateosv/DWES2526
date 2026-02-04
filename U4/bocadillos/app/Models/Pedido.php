@@ -11,6 +11,10 @@ class Pedido extends Model
     function detalles(){
         return $this->hasMany(Detalle::class)->get();
     }
+    //Relación con usuario. 1 pedido lo crea 1 usuario => BelongsTo
+    function usuario(){
+        return $this->belongsTo(User::class,'user_id');
+    }
 
     function total(){
         return DB::select('SELECT sum(cantidad * precio) as total
