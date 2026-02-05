@@ -6,9 +6,11 @@ use App\Models\Detalle;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Exception;
+
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PedidoController extends Controller
 {
@@ -27,7 +29,14 @@ class PedidoController extends Controller
     //Crear pedido
     public function crearPedido(Request $r)
     {
+         //Chequear que se ha pulsdo el boton nuevo pedido
+        $r->validate([
+            'nuevo'=> 'required'
+        ]);
+
         try {
+           
+
             $p = new Pedido();
             $p->cancelado = false;
             $p->user_id=Auth::user()->id;
@@ -149,5 +158,34 @@ class PedidoController extends Controller
             return back()->with('mensaje','No se ha encontrado pedido');
         }
 
+    }
+    function borrarPedido(Request $r){
+        $r->validate([
+            'borrar' => 'required'
+        ]);
+        try {
+            //Recuperar el pedido
+            $p = Pedido::find($r->borrar);
+            if($p==null || !$p->cancelado){
+                throw new Exception('No existe pedido o no está cancelado');
+            }
+            if($p->user_id!=Auth::user()->id){
+                throw new Exception('No puedes borrar el pedido porque es de otro usario');
+            }
+            DB::transaction(function() use($p){
+                //Borrar el detalle del pedido
+                foreach($p->detalles() as $d){
+                    $d->delete();
+                }
+                //DB::delete('delete from detalles where pedido_id='.$p->id);
+                //Borrar el pedido
+                $p->delete();
+                
+            });
+            return back()->with('mensaje','Pedido borrado');
+
+        } catch (\Throwable $th) {
+           return back()->with('mensaje','Error al borrar:'.$th->getMessage());
+        }
     }
 }

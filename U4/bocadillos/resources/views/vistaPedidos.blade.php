@@ -28,7 +28,19 @@
                         <td>
                             <a href="{{route('detalle',$p->id)}}">Ver Detalle</a>
                             @if ($p->user_id==Auth::user()->id)
-                                <button>Borrar</button>    
+                                @if (!$p->cancelado)
+                                    <form action="{{route('modificar',$p->id)}}" method="post">
+                                        @method('PUT')
+                                        @csrf
+                                        <button type="submit" name="cancelar" value="cancelar">Cancelar</button>    
+                                    </form>
+                                 @endif
+                            
+                                <form action="{{route('borrar')}}" method="post">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button type="submit" name="borrar" value="{{$p->id}}">Borrar</button>    
+                                </form>
                             @endif
                             
                         </td>
@@ -59,7 +71,6 @@
                         </tr>
                     @endforeach
                     </table>
-                    
                 @endif
         </div>
     </div>

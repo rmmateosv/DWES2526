@@ -21,6 +21,7 @@ Route::controller(PedidoController::class)->group(function(){
     Route::put('/modificar/{id}','modificar')->name('modificar');
     Route::get('/pedidos','verPedidos')->name('pedidos');
     Route::get('/detalle/{idPedido}','verDetalle')->name('detalle');
+    Route::delete('/pedido','borrarPedido')->name('borrar');
 });
 
 Route::controller(LoginController::class)->group(function(){

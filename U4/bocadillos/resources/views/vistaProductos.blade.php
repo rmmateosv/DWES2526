@@ -69,7 +69,7 @@
                 @else
                     <form action="{{route('crearPedido')}}" method="post">
                         @csrf
-                        <button>Nuevo Pedido</button>
+                        <button type="submit" name="nuevo" value="nuevo">Nuevo Pedido</button>
                     </form>
                 @endif    
         </div>
