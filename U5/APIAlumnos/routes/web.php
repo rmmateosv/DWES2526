@@ -8,4 +8,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::apiResource('apiAlumnos',AlumnoController::class)->withoutMiddleware(VerifyCsrfToken::class);
+//Definir todas las rutas de la api
+Route::apiResource('apiAlumnos',AlumnoController::class)
+            ->withoutMiddleware(VerifyCsrfToken::class);

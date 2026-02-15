@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <h3>CLIENTE API ALUMNOS</h3>
+        <div style="display: flex;justify-content: space-between;">
+            <form action="">
+                <input type="text" id="nombre" placeholder="nombre">
+                <input type="text" id="curso" placeholder="curso">
+                <button type="button" onclick="crearAlumno()">Crear</button>
+                <p></p>
+                <table id="datosAlumnos" class="table">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Curso</th>
+                        <th>Acciones</th>
+                    </tr>
+                </table>
+            </form>
+            <div id="infoAlumno" style="border:1px solid black;padding: 20px;">
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+<script>
+    const urlBase = 'http://3.208.34.185/DWES2526/U5/APIAlumnos/public';
+
+    //configurar axios
+    const api = axios.create({
+        baseURL: urlBase,
+        headers: { 'Content-Type': "application/json" }
+    });
+
+    window.onload = function () {
+        cargarAlumnos();
+    };
+
+
+    async function cargarAlumnos() {
+        try {
+            //Lamar al endpoint http://?/DWES2526/U5/APIAlumnos/public/apiAlumnos
+            const respuesta = await api.get('/apiAlumnos');
+
+            //Actualziar la tabla datosAlumnos
+            const tabla = document.getElementById('datosAlumnos');
+            tabla.innerHTML = '<tr>' +
+                '<th>Nombre</th>' +
+                '<th>Curso</th>' +
+                '<th>Acciones</th>' +
+                '</tr>';
+            //REcueperar los alumnos del json que devuelve la api
+            const alumnos = respuesta.data;
+            console.log(respuesta);
+            alumnos.forEach(a => {
+                //Crear una fila para cada alumno
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td>${a.nombre}</td>` + `<td>${a.curso}</td>` +
+                    `<td><button type="button" onclick="detalleAlumno(${a.id})">Detalle</button>` +
+                    `<button type="button" onclick="modificarAlumno(${a.id})">Modificar</button>` +
+                    `<button type="button" onclick="borrarAlumno(${a.id})">Borrar</button></td>`;
+                tabla.appendChild(tr);
+            });
+        } catch (error) {
+            if (error.response) {
+                alert("Error " + error.response.status +
+                    ": " + error.response.data.message);
+            } else {
+                alert("Error inesperado: " + error.message);
+            }
+        }
+    }
+    async function crearAlumno() {
+        try {
+            //Crear json alumno
+            const alumno = {
+                nombre: document.getElementById('nombre').value,
+                curso: document.getElementById('curso').value
+            };
+            //Lamar al endpoint http://?/DWES2526/U5/APIAlumnos/public/apiAlumnos
+            const respuesta = await api.post('/apiAlumnos', alumno);
+            console.log(respuesta.data);
+            alert(`Alumno con id ${respuesta.data.id} creado`);
+            cargarAlumnos();
+        } catch (error) {
+            if (error.response) {
+                alert("Error " + error.response.status +
+                    ": " + error.response.data.message);
+            } else {
+                alert("Error inesperado: " + error.message);
+            }
+        }
+    }
+    async function detalleAlumno(id) {
+        try {
+            console.log("ID recibido:", id);
+            //Lamar al endpoint http://?/DWES2526/U5/APIAlumnos/public/apiAlumnos
+            const respuesta = await api.get(`/apiAlumnos/${id}`);
+            document.getElementById('infoAlumno').innerHTML = `<h4>ID:${respuesta.data.id}</h4>` +
+                `<h4>NOMBRE:${respuesta.data.nombre}</h4>` +
+                `<h4>CURSO:${respuesta.data.curso}</h4>`;
+        } catch (error) {
+            if (error.response) {
+                alert("Error " + error.response.status +
+                    ": " + error.response.data.message);
+            } else {
+                alert("Error inesperado: " + error.message);
+            }
+        }
+    }
+    async function modificarAlumno(id) {
+        try {
+            const alumno = {
+                nombre: document.getElementById('nombre').value,
+                curso: document.getElementById('curso').value
+            };
+            //Lamar al endpoint http://?/DWES2526/U5/APIAlumnos/public/apiAlumnos
+            const respuesta = await api.put('/apiAlumnos/' + id, alumno);
+            cargarAlumnos();
+        } catch (error) {
+            if (error.response) {
+                alert("Error " + error.response.status +
+                    ": " + error.response.data.message);
+            } else {
+                alert("Error inesperado: " + error.message);
+            }
+        }
+    }
+    async function borrarAlumno(id) {
+        try {
+            if (confirm('¿Estás seguro de que deseas eliminar este alumno?')) {
+                //Lamar al endpoint http://?/DWES2526/U5/APIAlumnos/public/apiAlumnos
+                const respuesta = await api.delete('/apiAlumnos/' + id);
+                cargarAlumnos();
+            }
+        } catch (error) {
+            if (error.response) {
+                alert("Error " + error.response.status +
+                    ": " + error.response.data.message);
+            } else {
+                alert("Error inesperado: " + error.message);
+            }
+        }
+    }
+</script>
+
+</html>
