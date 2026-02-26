@@ -9,7 +9,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::apiResource('productos',ProductoController::class);
+Route::apiResource('productos',ProductoController::class)->middleware('auth:sanctum');
 
 
 Route::controller(LoginController::class)->group(
@@ -18,4 +18,7 @@ Route::controller(LoginController::class)->group(
         Route::post('login','login');
     }
 );
+
+//Ruta salir, debe estar autenticado
+Route::get('salir',[LoginController::class,'salir'])->middleware('auth:sanctum');
 
